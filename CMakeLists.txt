@@ -11,6 +11,26 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 message(STATUS "Cmake Build Configuration for ${PROJECT_NAME} @v${PROJECT_VERSION}")
 
-add_executable(${PROJECT_NAME} src/main.cpp)
+add_executable(${PROJECT_NAME} src/main.cpp
+                src/core/game/game.cpp
+                src/core/graphics/graphics.cpp
+                src/models/agent.cpp)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/lib/SDL2/include)
+
+if(WIN32)
+    message("Windows")
+    target_link_libraries(${PROJECT_NAME} PUBLIC
+                        ${CMAKE_CURRENT_SOURCE_DIR}/lib/SDL2/lib/windows/x64/SDL2_image.lib
+                        ${CMAKE_CURRENT_SOURCE_DIR}/lib/SDL2/lib/windows/x64/SDL2.lib)
+
+    file(GLOB_RECURSE DLLS ${CMAKE_CURRENT_SOURCE_DIR}/lib/SDL2/lib/windows/x64/dlls/*.dll)
+
+
+    foreach(Dllfile ${DLLS})
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                         COMMAND "${CMAKE_COMMAND}" -E copy
+                         ${Dllfile} ${CMAKE_CURRENT_SOURCE_DIR}/build
+                         COMMENT "Copying ${Dllfile}")
+    endforeach()
+endif()
