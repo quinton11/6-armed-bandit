@@ -14,7 +14,10 @@ message(STATUS "Cmake Build Configuration for ${PROJECT_NAME} @v${PROJECT_VERSIO
 add_executable(${PROJECT_NAME} src/main.cpp
                 src/core/game/game.cpp
                 src/core/graphics/graphics.cpp
-                src/models/agent.cpp)
+                src/models/agent.cpp
+                src/core/screens/screen.cpp
+                src/core/screens/home/homescreen.cpp
+                src/core/screens/menu/menu.cpp)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/lib/SDL2/include)
 

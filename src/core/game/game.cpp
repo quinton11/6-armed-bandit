@@ -1,4 +1,5 @@
 #include "game.hpp"
+#include "../screens/home/homescreen.hpp"
 
 Game *Game::instance = nullptr;
 Graphics *Game::graphics = nullptr;
@@ -36,9 +37,17 @@ void Game::release()
 
 void Game::Run()
 {
+    HomeScreen home = HomeScreen(graphics->windowWidth, graphics->windowHeight);
     while (!isDone)
     {
-        // Graphics::renderer
+        if (home.ismounted)
+        {
+            home.render(graphics->getRenderer());
+        }
+        else if (!home.ismounted && home.quit)
+        {
+            isDone = true;
+        }
         SDL_RenderPresent(graphics->getRenderer());
     }
 }
