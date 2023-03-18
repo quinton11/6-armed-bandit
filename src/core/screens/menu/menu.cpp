@@ -6,16 +6,16 @@ MenuController::MenuController()
 {
     // Create menus
     // main menu
-    Button demo = Button{"demo", false, false};
-    Button cust = Button{"custom", false, false};
-    Button best = Button{"best", false, false};
+    Button *demo = new Button{"demo", false, false};
+    Button *cust = new Button{"custom", false, false};
+    Button *best = new Button{"best", false, false};
     mmain = Menu{
         "main-menu", {demo, cust, best}, true, false};
 
     // custom menu
-    Button newAgent = Button{"new agent", false, false};
-    Button selectAgent = Button{"select agent", false, false};
-    Button back = Button{"back", false, false};
+    Button *newAgent = new Button{"new agent", false, false};
+    Button *selectAgent = new Button{"select agent", false, false};
+    Button *back = new Button{"back", false, false};
     custom = Menu{"custom-menu", {newAgent, selectAgent, back}, false, false};
 }
 MenuController::~MenuController() {}
@@ -71,28 +71,28 @@ void MenuController::setMain(SDL_FRect c, float bs, SDL_Renderer *r)
 
     std::pair<SDL_Texture *, SDL_Texture *> txtPair;
 
-    for (std::list<Button>::iterator b = mmain.buttons.begin(); b != mmain.buttons.end();)
+    for (std::list<Button *>::iterator b = mmain.buttons.begin(); b != mmain.buttons.end();)
     {
-        if (b->name == "demo")
+        if ((*b)->name == "demo")
         {
-            b->rect = drect;
+            (*b)->rect = drect;
         }
-        else if (b->name == "custom")
+        else if ((*b)->name == "custom")
         {
-            b->rect = crect;
+            (*b)->rect = crect;
         }
-        else if (b->name == "best")
+        else if ((*b)->name == "best")
         {
-            b->rect = brect;
+            (*b)->rect = brect;
         }
 
         // textures
         std::cout << "In get text pair" << std::endl;
-        txtPair = Util::getTextPairR(r, b->name, b->rect);
+        txtPair = Util::getTextPairR(r, (*b)->name, (*b)->rect);
 
-        // b->rect.x = cx - b->rect.w;
-        b->text = txtPair.first;
-        b->hovertext = txtPair.second;
+        (*b)->rect.x = cx - (*b)->rect.w / 2;
+        (*b)->text = txtPair.first;
+        (*b)->hovertext = txtPair.second;
 
         b++;
     }
@@ -113,27 +113,27 @@ void MenuController::setCustom(SDL_FRect c, float bs, SDL_Renderer *r)
 
     std::pair<SDL_Texture *, SDL_Texture *> txtPair;
 
-    for (std::list<Button>::iterator b = custom.buttons.begin(); b != custom.buttons.end();)
+    for (std::list<Button *>::iterator b = custom.buttons.begin(); b != custom.buttons.end();)
     {
-        if (b->name == "new agent")
+        if ((*b)->name == "new agent")
         {
-            b->rect = narect;
+            (*b)->rect = narect;
         }
-        else if (b->name == "select agent")
+        else if ((*b)->name == "select agent")
         {
-            b->rect = sarect;
+            (*b)->rect = sarect;
         }
-        else if (b->name == "back")
+        else if ((*b)->name == "back")
         {
-            b->rect = brect;
+            (*b)->rect = brect;
         }
 
         // textures
-        txtPair = Util::getTextPairR(r, b->name, b->rect);
+        txtPair = Util::getTextPairR(r, (*b)->name, (*b)->rect);
 
-        // b->rect.x = cx - b->rect.w;
-        b->text = txtPair.first;
-        b->hovertext = txtPair.second;
+        (*b)->rect.x = cx - (*b)->rect.w / 2;
+        (*b)->text = txtPair.first;
+        (*b)->hovertext = txtPair.second;
 
         b++;
     }
@@ -145,22 +145,19 @@ void MenuController::renderMenu(SDL_Renderer *r)
     SDL_SetRenderDrawColor(r, 255, 0, 0, SDL_ALPHA_OPAQUE);
     int s;
 
-    for (std::list<Button>::iterator b = activeMenu.buttons.begin(); b != activeMenu.buttons.end();)
+    for (std::list<Button *>::iterator b = activeMenu.buttons.begin(); b != activeMenu.buttons.end();)
     {
         SDL_SetRenderDrawColor(r, 255, 255, 0, SDL_ALPHA_OPAQUE);
-        SDL_RenderFillRectF(r, &(b->rect));
-        if (b->isActive)
+        // SDL_RenderFillRectF(r, &((*b)->rect));
+        if ((*b)->isActive)
         {
-            s = SDL_RenderCopyF(r, b->hovertext, nullptr, &(b->rect));
+            SDL_RenderCopyF(r, (*b)->hovertext, nullptr, &(*b)->rect);
+            // std::cout << "Is Active" << std::endl;
         }
         else
         {
-            s = SDL_RenderCopyF(r, b->text, nullptr, &(b->rect));
+            SDL_RenderCopyF(r, (*b)->text, nullptr, &(*b)->rect);
         }
-        /* if (s == -1)
-        {
-            std::cout << "Error rendering" << std::endl;
-        } */
 
         b++;
     }
@@ -168,28 +165,28 @@ void MenuController::renderMenu(SDL_Renderer *r)
 
 void MenuController::inButton(bool isClicked, int mx, int my)
 {
-    std::list<Button>::iterator b;
+    std::list<Button *>::iterator b;
     if (activeMenu.name == mmain.name)
     {
         // main menu
         for (b = activeMenu.buttons.begin(); b != activeMenu.buttons.end();)
         {
-            b->isActive = false;
-            if (mouseinplay(mx, my, b->rect))
+            (*b)->isActive = false;
+            if (mouseinplay(mx, my, (*b)->rect))
             {
-                b->isActive = true;
+                (*b)->isActive = true;
                 if (isClicked)
                 {
-                    if (b->name == "demo")
+                    if ((*b)->name == "demo")
                     {
                         std::cout << "Demo button" << std::endl;
                     }
-                    else if (b->name == "custom")
+                    else if ((*b)->name == "custom")
                     {
                         std::cout << "Custom button" << std::endl;
                         activeMenu = custom;
                     }
-                    else if (b->name == "best")
+                    else if ((*b)->name == "best")
                     {
                         std::cout << "Best button" << std::endl;
                     }
@@ -205,19 +202,23 @@ void MenuController::inButton(bool isClicked, int mx, int my)
         for (b = activeMenu.buttons.begin(); b != activeMenu.buttons.end();)
         {
             // b->isActive = false;
-            if (mouseinplay(mx, my, b->rect))
+            (*b)->isActive = false;
+
+            if (mouseinplay(mx, my, (*b)->rect))
             {
+                (*b)->isActive = true;
+
                 if (isClicked)
                 {
-                    if (b->name == "new agent")
+                    if ((*b)->name == "new agent")
                     {
                         std::cout << "New Agent button" << std::endl;
                     }
-                    else if (b->name == "select agent")
+                    else if ((*b)->name == "select agent")
                     {
                         std::cout << "Select Agent button" << std::endl;
                     }
-                    else if (b->name == "back")
+                    else if ((*b)->name == "back")
                     {
                         std::cout << "Back button" << std::endl;
                         activeMenu = mmain;

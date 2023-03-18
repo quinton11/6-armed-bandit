@@ -48,6 +48,11 @@ bool Graphics::init()
         std::cout << "Window Creation Error: " << SDL_GetErrorMsg << std::endl;
         return false;
     }
+    //int succ = TTF_Init();
+    if (TTF_Init() == -1)
+    {
+        std::cout << "SDL_ttf Init error" << std::endl;
+    }
 
     renderer = SDL_CreateRenderer(win, -1, 0);
     return true;

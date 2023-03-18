@@ -17,7 +17,7 @@ struct Button
 struct Menu
 {
     std::string name;
-    std::list<Button> buttons;
+    std::list<Button*> buttons;
     bool active;
     bool set;
 };

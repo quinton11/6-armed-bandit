@@ -44,7 +44,9 @@ void Game::Run()
 
     // fonts and textures
     std::string fontPath = "assets/fonts/Starjedi.ttf";
-    Texture::initTexture(fontPath);
+    Texture txtManager = Texture(fontPath);
+    //txtManager.initTexture(fontPath);
+
     std::cout << "After texture init" << std::endl;
 
     HomeScreen home = HomeScreen(graphics->windowWidth, graphics->windowHeight, graphics->getRenderer());

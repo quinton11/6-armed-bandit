@@ -2,8 +2,27 @@
 #include "iostream"
 
 //
-TTF_Font *font = nullptr;
+TTF_Font *Texture::font = nullptr;
 
+Texture::Texture() {}
+Texture::Texture(std::string fname)
+{
+    int flags = IMG_INIT_JPG | IMG_INIT_PNG;
+    if (!(IMG_Init(flags) && flags))
+    {
+        std::cout << "SDL_Image could not be initialized, SDL_Image Error: "
+                  << IMG_GetError << std::endl;
+    }
+
+    std::cout << fname.c_str() << std::endl;
+    font = TTF_OpenFont(fname.c_str(), 25);
+    if (font == NULL)
+    {
+        std::cout << "Error loading font" << TTF_GetError() << std::endl;
+    }
+}
+
+Texture::~Texture() {}
 // textures
 void Texture::initTexture(std::string fname)
 {
@@ -13,11 +32,12 @@ void Texture::initTexture(std::string fname)
         std::cout << "SDL_Image could not be initialized, SDL_Image Error: "
                   << IMG_GetError << std::endl;
     }
+
     std::cout << fname.c_str() << std::endl;
-    TTF_Font *sfont = TTF_OpenFont(fname.c_str(), 25);
-    if (sfont == NULL)
+    font = TTF_OpenFont(fname.c_str(), 25);
+    if (font == NULL)
     {
-        std::cout << "Error loading font" << std::endl;
+        std::cout << "Error loading font" << TTF_GetError() << std::endl;
     }
 }
 

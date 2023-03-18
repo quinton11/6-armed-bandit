@@ -22,7 +22,7 @@ public:
     void setActiveMenu(std::string n);
     void setMenus(int sW, int sH,SDL_Renderer* r);
     void setMain(SDL_FRect c, float bs,SDL_Renderer* r);
-    void setCustom(SDL_FRect c, float bs, SDL_Renderer *r);
+    void setCustom(SDL_FRect c, float bs,SDL_Renderer* r);
     void renderMenu(SDL_Renderer *r);
     void inButton(bool isClicked, int mx, int my);
     bool mouseinplay(int mx, int my, SDL_FRect r);
