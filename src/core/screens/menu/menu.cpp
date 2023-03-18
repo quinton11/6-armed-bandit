@@ -1,4 +1,5 @@
 #include "menu.hpp"
+#include "../../../utils/utils.hpp"
 #include <iostream>
 
 MenuController::MenuController()
@@ -30,7 +31,7 @@ void MenuController::setActiveMenu(std::string n)
     return;
 }
 
-void MenuController::setMenus(int sW, int sH)
+void MenuController::setMenus(int sW, int sH, SDL_Renderer *r)
 {
     float cP = 0.7;
     float bsy = 0.6;
@@ -48,13 +49,13 @@ void MenuController::setMenus(int sW, int sH)
     float bstarty = bsy * sH;
 
     // set each menu
-    setMain(c, bstarty);
-    setCustom(c, bstarty);
+    setMain(c, bstarty, r);
+    setCustom(c, bstarty, r);
 
     setActiveMenu("main-menu");
 }
 
-void MenuController::setMain(SDL_FRect c, float bs)
+void MenuController::setMain(SDL_FRect c, float bs, SDL_Renderer *r)
 {
     float cx = c.x + c.w / 2;
     float bx = cx - bwidth;
@@ -67,6 +68,8 @@ void MenuController::setMain(SDL_FRect c, float bs)
 
     // best button
     SDL_FRect brect = {bx, crect.y + bheight + yspacing, bwidth, bheight};
+
+    std::pair<SDL_Texture *, SDL_Texture *> txtPair;
 
     for (std::list<Button>::iterator b = mmain.buttons.begin(); b != mmain.buttons.end();)
     {
@@ -82,10 +85,19 @@ void MenuController::setMain(SDL_FRect c, float bs)
         {
             b->rect = brect;
         }
+
+        // textures
+        std::cout << "In get text pair" << std::endl;
+        txtPair = Util::getTextPairR(r, b->name, b->rect);
+
+        // b->rect.x = cx - b->rect.w;
+        b->text = txtPair.first;
+        b->hovertext = txtPair.second;
+
         b++;
     }
 }
-void MenuController::setCustom(SDL_FRect c, float bs)
+void MenuController::setCustom(SDL_FRect c, float bs, SDL_Renderer *r)
 {
     float cx = c.x + c.w / 2;
     float bx = cx - bwidth;
@@ -98,6 +110,8 @@ void MenuController::setCustom(SDL_FRect c, float bs)
 
     // back button
     SDL_FRect brect = {bx, sarect.y + bheight + yspacing, bwidth, bheight};
+
+    std::pair<SDL_Texture *, SDL_Texture *> txtPair;
 
     for (std::list<Button>::iterator b = custom.buttons.begin(); b != custom.buttons.end();)
     {
@@ -113,17 +127,41 @@ void MenuController::setCustom(SDL_FRect c, float bs)
         {
             b->rect = brect;
         }
+
+        // textures
+        txtPair = Util::getTextPairR(r, b->name, b->rect);
+
+        // b->rect.x = cx - b->rect.w;
+        b->text = txtPair.first;
+        b->hovertext = txtPair.second;
+
         b++;
     }
 }
 
 void MenuController::renderMenu(SDL_Renderer *r)
 {
+    // std::cout << "In render menu" << std::endl;
     SDL_SetRenderDrawColor(r, 255, 0, 0, SDL_ALPHA_OPAQUE);
+    int s;
 
     for (std::list<Button>::iterator b = activeMenu.buttons.begin(); b != activeMenu.buttons.end();)
     {
+        SDL_SetRenderDrawColor(r, 255, 255, 0, SDL_ALPHA_OPAQUE);
         SDL_RenderFillRectF(r, &(b->rect));
+        if (b->isActive)
+        {
+            s = SDL_RenderCopyF(r, b->hovertext, nullptr, &(b->rect));
+        }
+        else
+        {
+            s = SDL_RenderCopyF(r, b->text, nullptr, &(b->rect));
+        }
+        /* if (s == -1)
+        {
+            std::cout << "Error rendering" << std::endl;
+        } */
+
         b++;
     }
 }
@@ -136,9 +174,10 @@ void MenuController::inButton(bool isClicked, int mx, int my)
         // main menu
         for (b = activeMenu.buttons.begin(); b != activeMenu.buttons.end();)
         {
-            // b->isActive = false;
+            b->isActive = false;
             if (mouseinplay(mx, my, b->rect))
             {
+                b->isActive = true;
                 if (isClicked)
                 {
                     if (b->name == "demo")

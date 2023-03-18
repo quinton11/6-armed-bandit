@@ -1,10 +1,11 @@
 #include "homescreen.hpp"
+//#include "../../../utils/utils.hpp"
 #include <iostream>
 
-HomeScreen::HomeScreen(int w, int h) : width(w), height(h)
+HomeScreen::HomeScreen(int w, int h,SDL_Renderer* r) : width(w), height(h)
 {
     mc = MenuController();
-    mc.setMenus(width, height);
+    mc.setMenus(width, height,r);
 }
 
 HomeScreen::~HomeScreen() {}

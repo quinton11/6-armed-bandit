@@ -1,5 +1,9 @@
 #include "game.hpp"
 #include "../screens/home/homescreen.hpp"
+#include "../../utils/utils.hpp"
+#include "../../utils/time.hpp"
+#include "../../utils/texture.hpp"
+#include "iostream"
 
 Game *Game::instance = nullptr;
 Graphics *Game::graphics = nullptr;
@@ -37,9 +41,21 @@ void Game::release()
 
 void Game::Run()
 {
-    HomeScreen home = HomeScreen(graphics->windowWidth, graphics->windowHeight);
+
+    // fonts and textures
+    std::string fontPath = "assets/fonts/Starjedi.ttf";
+    Texture::initTexture(fontPath);
+    std::cout << "After texture init" << std::endl;
+
+    HomeScreen home = HomeScreen(graphics->windowWidth, graphics->windowHeight, graphics->getRenderer());
+    std::cout << "After home screen init" << std::endl;
+
+    // deltatime
+    float dt;
+    Time::initTime();
     while (!isDone)
     {
+        dt = Time::getDeltaTime();
         if (home.ismounted)
         {
             home.render(graphics->getRenderer());
