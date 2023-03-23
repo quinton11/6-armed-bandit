@@ -1,6 +1,7 @@
 #pragma once
 #include "SDL.h"
 #include "../../../utils/components.hpp"
+#include "../overlay/overlay.hpp"
 
 class MenuController
 {
@@ -14,6 +15,11 @@ public:
     Menu mmain;  /* demo button custom button and best button */
     Menu custom; /* new model button and choose model button */
     Menu activeMenu;
+    Overlay ol;
+    bool ismounted=true;
+
+    /* Hold a sub menu object which like the menu object allows
+    switching control from menu to sub menu and mounting a sub menu */
 
     float bwidth = 140;
     float bheight = 25;

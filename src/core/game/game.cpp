@@ -1,5 +1,7 @@
 #include "game.hpp"
 #include "../screens/home/homescreen.hpp"
+#include "../env/env.hpp"
+#include "../../models/agent.hpp"
 #include "../../utils/utils.hpp"
 #include "../../utils/time.hpp"
 #include "../../utils/texture.hpp"
@@ -43,9 +45,9 @@ void Game::Run()
 {
 
     // fonts and textures
-    std::string fontPath = "assets/fonts/Starjedi.ttf";
+    std::string fontPath = "assets/fonts/AwmuDemo-YzPML.otf";
     Texture txtManager = Texture(fontPath);
-    //txtManager.initTexture(fontPath);
+    // txtManager.initTexture(fontPath);
 
     std::cout << "After texture init" << std::endl;
 
@@ -55,6 +57,8 @@ void Game::Run()
     // deltatime
     float dt;
     Time::initTime();
+    Agent ag = Agent();
+    Env env = Env(&ag);
     while (!isDone)
     {
         dt = Time::getDeltaTime();
@@ -66,6 +70,12 @@ void Game::Run()
         {
             isDone = true;
         }
-        SDL_RenderPresent(graphics->getRenderer());
+        else
+        {
+            //env.init(graphics->windowWidth, graphics->windowHeight, graphics->getRenderer());
+            //env.run(graphics->getRenderer());
+
+            SDL_RenderPresent(graphics->getRenderer());
+        }
     }
 }

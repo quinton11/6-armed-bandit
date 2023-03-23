@@ -58,3 +58,30 @@ Util::getTextPairR(SDL_Renderer *r, std::string nm, SDL_FRect &dest)
 
     // surf = TTF_RenderText_Blended(Te)
 }
+
+SDL_Texture *Util::getBlockText(SDL_Renderer *r, std::string btxt, SDL_FRect &dest)
+{
+    SDL_Surface *s;
+    SDL_Texture *t;
+
+    std::cout << "Before creating blended wrapped block" << std::endl;
+    s = TTF_RenderUTF8_Blended_Wrapped(Texture::font, btxt.c_str(), {255, 255, 255},0);
+    if (s == NULL)
+    {
+        std::cout << "Error in creating surface" << std::endl;
+    }
+    std::cout << "After creating blended wrapped block" << std::endl;
+
+    t = SDL_CreateTextureFromSurface(r, s);
+    if (r == NULL)
+    {
+        std::cout << "Error in creating texture from surface" << std::endl;
+    }
+
+    /* dest.w = s->w - 10;
+    dest.h = s->h - 10; */
+
+    SDL_FreeSurface(s);
+
+    return t;
+}

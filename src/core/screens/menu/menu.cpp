@@ -1,5 +1,6 @@
 #include "menu.hpp"
 #include "../../../utils/utils.hpp"
+#include "../../env/env.hpp"
 #include <iostream>
 
 MenuController::MenuController()
@@ -13,10 +14,12 @@ MenuController::MenuController()
         "main-menu", {demo, cust, best}, true, false};
 
     // custom menu
-    Button *newAgent = new Button{"new agent", false, false};
-    Button *selectAgent = new Button{"select agent", false, false};
+    Button *newAgent = new Button{"create", false, false};
+    Button *selectAgent = new Button{"select", false, false};
     Button *back = new Button{"back", false, false};
     custom = Menu{"custom-menu", {newAgent, selectAgent, back}, false, false};
+
+    ol = Overlay();
 }
 MenuController::~MenuController() {}
 
@@ -53,6 +56,7 @@ void MenuController::setMenus(int sW, int sH, SDL_Renderer *r)
     setCustom(c, bstarty, r);
 
     setActiveMenu("main-menu");
+    ol.setStructure(sW, sH, r);
 }
 
 void MenuController::setMain(SDL_FRect c, float bs, SDL_Renderer *r)
@@ -115,11 +119,11 @@ void MenuController::setCustom(SDL_FRect c, float bs, SDL_Renderer *r)
 
     for (std::list<Button *>::iterator b = custom.buttons.begin(); b != custom.buttons.end();)
     {
-        if ((*b)->name == "new agent")
+        if ((*b)->name == "create")
         {
             (*b)->rect = narect;
         }
-        else if ((*b)->name == "select agent")
+        else if ((*b)->name == "select")
         {
             (*b)->rect = sarect;
         }
@@ -161,6 +165,13 @@ void MenuController::renderMenu(SDL_Renderer *r)
 
         b++;
     }
+
+    // render ol
+    ol.render(r);
+    /* if (ol.ismounted)
+    {
+        std::cout << "Overlay is mounted" << std::endl;
+    } */
 }
 
 void MenuController::inButton(bool isClicked, int mx, int my)
@@ -180,15 +191,20 @@ void MenuController::inButton(bool isClicked, int mx, int my)
                     if ((*b)->name == "demo")
                     {
                         std::cout << "Demo button" << std::endl;
+                        ol.setOverlay("Demo Mode");
+                        // set game mode
+                        Env::gMode = GameMode::Demo;
                     }
                     else if ((*b)->name == "custom")
                     {
                         std::cout << "Custom button" << std::endl;
                         activeMenu = custom;
+                        Env::gMode = GameMode::Custom;
                     }
                     else if ((*b)->name == "best")
                     {
                         std::cout << "Best button" << std::endl;
+                        Env::gMode = GameMode::Best;
                     }
                 }
                 break;
@@ -210,11 +226,11 @@ void MenuController::inButton(bool isClicked, int mx, int my)
 
                 if (isClicked)
                 {
-                    if ((*b)->name == "new agent")
+                    if ((*b)->name == "create")
                     {
                         std::cout << "New Agent button" << std::endl;
                     }
-                    else if ((*b)->name == "select agent")
+                    else if ((*b)->name == "select")
                     {
                         std::cout << "Select Agent button" << std::endl;
                     }

@@ -9,14 +9,22 @@ enum AgentMode
 enum GameMode
 {
     Demo,
-    Training
+    Custom,
+    Best
 };
 
-enum Action{
+enum Action
+{
     One,
     Two,
     Three,
     Four,
     Five,
     Six
+};
+
+enum EnvState
+{
+    Stall,
+    Receive
 };

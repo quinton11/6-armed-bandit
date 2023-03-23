@@ -17,7 +17,15 @@ struct Button
 struct Menu
 {
     std::string name;
-    std::list<Button*> buttons;
+    std::list<Button *> buttons;
     bool active;
     bool set;
+};
+
+struct OverlayInfo
+{
+    std::string title;
+    std::string content;
+    SDL_Texture *titleT;
+    SDL_Texture *contentT;
 };

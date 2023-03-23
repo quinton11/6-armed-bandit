@@ -1,11 +1,11 @@
 #include "homescreen.hpp"
-//#include "../../../utils/utils.hpp"
+// #include "../../../utils/utils.hpp"
 #include <iostream>
 
-HomeScreen::HomeScreen(int w, int h,SDL_Renderer* r) : width(w), height(h)
+HomeScreen::HomeScreen(int w, int h, SDL_Renderer *r) : width(w), height(h)
 {
     mc = MenuController();
-    mc.setMenus(width, height,r);
+    mc.setMenus(width, height, r);
 }
 
 HomeScreen::~HomeScreen() {}
@@ -24,6 +24,10 @@ void HomeScreen::render(SDL_Renderer *r)
         SDL_RenderClear(r);
         // draw menu on screen
         mc.renderMenu(r);
+        /* if (mc.ismounted == false)
+        {
+            ismounted = false;
+        } */
 
         SDL_RenderPresent(r);
     }
@@ -48,7 +52,7 @@ void HomeScreen::eventChecker()
         case SDL_MOUSEBUTTONDOWN:
             if (events.button.button == SDL_BUTTON_LEFT)
             {
-                //std::cout << "Mouse click event" << std::endl;
+                // std::cout << "Mouse click event" << std::endl;
                 mc.inButton(true, mousex, mousey);
             }
         }

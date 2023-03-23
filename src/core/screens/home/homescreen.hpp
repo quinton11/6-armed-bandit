@@ -5,7 +5,7 @@
 class HomeScreen : public Screen
 {
 public:
-    HomeScreen(int w, int h,SDL_Renderer *r);
+    HomeScreen(int w, int h, SDL_Renderer *r);
     ~HomeScreen();
     void eventChecker();
     void render(SDL_Renderer *r);

@@ -15,12 +15,15 @@ add_executable(${PROJECT_NAME} src/main.cpp
                 src/core/game/game.cpp
                 src/core/graphics/graphics.cpp
                 src/models/agent.cpp
+                src/core/env/env.cpp
                 src/core/screens/screen.cpp
                 src/core/screens/home/homescreen.cpp
                 src/core/screens/menu/menu.cpp
+                src/core/screens/overlay/overlay.cpp
                 src/utils/utils.cpp
                 src/utils/time.cpp
                 src/utils/texture.cpp
+                
                 )
                 
 

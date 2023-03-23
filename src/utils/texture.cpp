@@ -34,7 +34,7 @@ void Texture::initTexture(std::string fname)
     }
 
     std::cout << fname.c_str() << std::endl;
-    font = TTF_OpenFont(fname.c_str(), 25);
+    font = TTF_OpenFont(fname.c_str(), 35);
     if (font == NULL)
     {
         std::cout << "Error loading font" << TTF_GetError() << std::endl;
