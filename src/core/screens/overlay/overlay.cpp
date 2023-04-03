@@ -1,5 +1,6 @@
 #include "overlay.hpp"
 #include <iostream>
+#include "../home/homescreen.hpp"
 #include "../../../utils/utils.hpp"
 
 Overlay::Overlay()
@@ -31,9 +32,6 @@ void Overlay::render(SDL_Renderer *r)
         SDL_RenderCopyF(r, current->titleT, nullptr, &titleCon);
 
         // render content
-        /* SDL_SetRenderDrawColor(r, 0, 0, 255, SDL_ALPHA_OPAQUE);
-
-        SDL_RenderFillRectF(r, &contentCon); */
         SDL_RenderCopyF(r, demo.contentT, nullptr, &contentCon);
 
         // render skipbutton
@@ -60,15 +58,16 @@ void Overlay::eventChecker()
         {
         case SDL_QUIT:
             ismounted = false;
-            quit = true;
-            // SDL_Quit();
+            HomeScreen::quit = true;
+            HomeScreen::ismounted = false;
+
             break;
 
         case SDL_MOUSEMOTION:
             mx = events.motion.x;
             my = events.motion.y;
             skipTrigger(false);
-            // mc.inButton(false, mousex, mousey);
+
         case SDL_MOUSEBUTTONDOWN:
             if (events.button.button == SDL_BUTTON_LEFT)
             {
@@ -98,7 +97,9 @@ void Overlay::skipTrigger(bool isClicked)
         {
             // unmount overlay
             std::cout << "Overlay Unmounted" << std::endl;
+            // unmount overlay and homescreen and move to actual game loop
             ismounted = false;
+            HomeScreen::ismounted = false;
         }
     }
 }

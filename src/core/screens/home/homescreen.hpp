@@ -11,8 +11,8 @@ public:
     void render(SDL_Renderer *r);
     void release();
     int width, height;
-    bool ismounted = true;
-    bool quit = false;
+    static bool ismounted; // set to static
+    static bool quit;
     SDL_Event events;
     int mousex, mousey = 0;
 

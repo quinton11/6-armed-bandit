@@ -1,5 +1,8 @@
 #include "env.hpp"
 #include "../../utils/time.hpp"
+#include "../screens/home/homescreen.hpp"
+
+#include <iostream>
 
 GameMode Env::gMode = GameMode::Demo;
 Env::Env() {}
@@ -11,21 +14,49 @@ Env::Env(Agent *ag) : agent(ag)
 
 void Env::setConfig() {}
 void Env::update() {}
-void Env::render(SDL_Renderer *r) {}
-void Env::init(int sW, int sH, SDL_Renderer *r)
+void Env::render(SDL_Renderer *r)
 {
-   /*  ol = Overlay();
-    ol.setStructure(sW, sH, r); */
+    SDL_RenderClear(r);
+    SDL_RenderPresent(r);
+}
+
+void Env::eventChecker()
+{
+    while (SDL_PollEvent(&events))
+    {
+        switch (events.type)
+        {
+        case SDL_QUIT:
+            HomeScreen::quit = true;
+            HomeScreen::ismounted = false;
+            done = true;
+
+            break;
+
+        case SDL_MOUSEMOTION:
+            mx = events.motion.x;
+            my = events.motion.y;
+
+        case SDL_MOUSEBUTTONDOWN:
+            if (events.button.button == SDL_BUTTON_LEFT)
+            {
+                // std::cout << "Mouse click event" << std::endl;
+
+                // mc.inButton(true, mousex, mousey);
+            }
+        }
+    }
 }
 
 void Env::run(SDL_Renderer *r)
 {
     float dt;
-    /* ol.ismounted = true;
-    ol.render(r); */
+    std::cout << "In run" << std::endl;
     while (!done)
     {
         dt = Time::getDeltaTime();
+
+        eventChecker();
         // run agent env loop
 
         /* Steps:

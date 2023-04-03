@@ -62,18 +62,18 @@ void Game::Run()
     while (!isDone)
     {
         dt = Time::getDeltaTime();
-        if (home.ismounted)
+        if (HomeScreen::ismounted)
         {
             home.render(graphics->getRenderer());
         }
-        else if (!home.ismounted && home.quit)
+        else if (!HomeScreen::ismounted && HomeScreen::quit)
         {
             isDone = true;
         }
         else
         {
-            //env.init(graphics->windowWidth, graphics->windowHeight, graphics->getRenderer());
-            //env.run(graphics->getRenderer());
+
+            env.run(graphics->getRenderer());
 
             SDL_RenderPresent(graphics->getRenderer());
         }

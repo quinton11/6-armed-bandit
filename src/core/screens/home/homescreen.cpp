@@ -2,6 +2,8 @@
 // #include "../../../utils/utils.hpp"
 #include <iostream>
 
+bool HomeScreen::ismounted = true;
+bool HomeScreen::quit = false;
 HomeScreen::HomeScreen(int w, int h, SDL_Renderer *r) : width(w), height(h)
 {
     mc = MenuController();
@@ -24,10 +26,6 @@ void HomeScreen::render(SDL_Renderer *r)
         SDL_RenderClear(r);
         // draw menu on screen
         mc.renderMenu(r);
-        /* if (mc.ismounted == false)
-        {
-            ismounted = false;
-        } */
 
         SDL_RenderPresent(r);
     }

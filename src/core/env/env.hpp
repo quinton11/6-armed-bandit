@@ -15,8 +15,8 @@ public:
 
     Env(Agent *ag);
     static GameMode gMode;
-    void init(int sW, int sH, SDL_Renderer *r);
     void run(SDL_Renderer *r);
+    void eventChecker();
 
 private:
     Agent *agent;
@@ -24,6 +24,8 @@ private:
     void setConfig(); // takes in level descriptors and configures according to values
                       // depending on demo or custom or best,configure accordingly
     void update();
+    SDL_Event events;
+    int mx,my=0;
     void render(SDL_Renderer *r);
     bool done = false;
     Overlay ol;
