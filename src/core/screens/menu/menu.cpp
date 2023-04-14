@@ -1,6 +1,6 @@
-#include "menu.hpp"
-#include "../../../utils/utils.hpp"
-#include "../../env/env.hpp"
+#include "menu.h"
+#include "../../../utils/utils.h"
+#include "../../env/env.h"
 #include <iostream>
 
 MenuController::MenuController()

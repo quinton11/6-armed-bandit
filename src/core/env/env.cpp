@@ -1,6 +1,6 @@
-#include "env.hpp"
-#include "../../utils/time.hpp"
-#include "../screens/home/homescreen.hpp"
+#include "env.h"
+#include "../../utils/time.h"
+#include "../screens/home/homescreen.h"
 
 #include <iostream>
 

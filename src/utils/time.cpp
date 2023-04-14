@@ -1,5 +1,5 @@
 #include "SDL.h"
-#include "time.hpp"
+#include "time.h"
 
 float currenttime = 0;
 float previoustime = 0;

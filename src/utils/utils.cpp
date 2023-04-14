@@ -2,8 +2,8 @@
 #include "list"
 #include "string"
 #include "iostream"
-#include "utils.hpp"
-#include "texture.hpp"
+#include "utils.h"
+#include "texture.h"
 // #include "SDL_ttf.h"
 
 std::pair<SDL_Texture *, SDL_Texture *>

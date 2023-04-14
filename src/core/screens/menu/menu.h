@@ -1,7 +1,7 @@
 #pragma once
 #include "SDL.h"
-#include "../../../utils/components.hpp"
-#include "../overlay/overlay.hpp"
+#include "../../../utils/components.h"
+#include "../overlay/overlay.h"
 
 class MenuController
 {

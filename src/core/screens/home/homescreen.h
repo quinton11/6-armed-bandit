@@ -1,6 +1,6 @@
 #pragma once
-#include "../screen.hpp"
-#include "../menu/menu.hpp"
+#include "../screen.h"
+#include "../menu/menu.h"
 
 class HomeScreen : public Screen
 {

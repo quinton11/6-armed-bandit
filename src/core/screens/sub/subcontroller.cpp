@@ -1,4 +1,4 @@
-#include "subcontroller.hpp"
+#include "subcontroller.h"
 
 SubController::SubController() {}
 SubController::~SubController() {}

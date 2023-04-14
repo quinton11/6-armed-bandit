@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../graphics/graphics.hpp"
+#include "../graphics/graphics.h"
 
 class Game
 {

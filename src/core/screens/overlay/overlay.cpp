@@ -1,7 +1,7 @@
-#include "overlay.hpp"
+#include "overlay.h"
 #include <iostream>
-#include "../home/homescreen.hpp"
-#include "../../../utils/utils.hpp"
+#include "../home/homescreen.h"
+#include "../../../utils/utils.h"
 
 Overlay::Overlay()
 {

@@ -1,4 +1,4 @@
-#include "graphics.hpp"
+#include "graphics.h"
 
 #include "iostream"
 

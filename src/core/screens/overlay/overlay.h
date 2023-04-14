@@ -1,6 +1,6 @@
 #pragma once
 #include "SDL.h"
-#include "../../../utils/components.hpp"
+#include "../../../utils/components.h"
 /* Called and passed a value to determine which text to render in its window */
 /* By default it should have a fixed width and height, the text field showing the information
 and the button to close the overlay */

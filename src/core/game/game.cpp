@@ -1,10 +1,10 @@
-#include "game.hpp"
-#include "../screens/home/homescreen.hpp"
-#include "../env/env.hpp"
-#include "../../models/agent.hpp"
-#include "../../utils/utils.hpp"
-#include "../../utils/time.hpp"
-#include "../../utils/texture.hpp"
+#include "game.h"
+#include "../screens/home/homescreen.h"
+#include "../env/env.h"
+#include "../../models/agent.h"
+#include "../../utils/utils.h"
+#include "../../utils/time.h"
+#include "../../utils/texture.h"
 #include "iostream"
 
 Game *Game::instance = nullptr;

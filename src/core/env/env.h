@@ -1,8 +1,8 @@
 #pragma once
 #include "SDL.h"
-#include "../../models/agent.hpp"
-#include "../../utils/enums.hpp"
-#include "../screens/overlay/overlay.hpp"
+#include "../../models/agent.h"
+#include "../../utils/enums.h"
+#include "../screens/overlay/overlay.h"
 /* This simulates the actual game
 Here, the agent receives a "state" from
 the environment, produces an action which then gives

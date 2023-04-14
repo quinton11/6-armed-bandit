@@ -1,4 +1,4 @@
-#include "agent.hpp"
+#include "agent.h"
 
 Agent::Agent() {}
 Agent::Agent(std::string mName, AgentMode aMode, GameMode gMode)
