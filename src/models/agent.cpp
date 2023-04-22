@@ -61,3 +61,95 @@ float Agent::estimate(float r, float prevV, int ts)
 
     return update;
 }
+
+bool Agent::takeAction(const Uint8 *state)
+{
+
+    SDL_PumpEvents();
+
+    if (state[SDL_SCANCODE_A])
+    {
+        std::cout << "A" << std::endl;
+        // action 1
+        return true;
+    }
+    else if (state[SDL_SCANCODE_S])
+    {
+        std::cout << "S" << std::endl;
+        // action 2
+        return true;
+    }
+    else if (state[SDL_SCANCODE_D])
+    {
+        std::cout << "D" << std::endl;
+        // action 3
+        return true;
+    }
+    else if (state[SDL_SCANCODE_F])
+    {
+        std::cout << "F" << std::endl;
+        // action 4
+        return true;
+    }
+    else if (state[SDL_SCANCODE_G])
+    {
+        std::cout << "G" << std::endl;
+        // action 4
+        return true;
+    }
+    else if (state[SDL_SCANCODE_H])
+    {
+        std::cout << "H" << std::endl;
+        // action 4
+        return true;
+    }
+
+    /* while (SDL_PollEvent(&events))
+    {
+        switch (events.type)
+        {
+        case SDL_KEYDOWN:
+            std::cout << "Key down" << std::endl;
+
+            if (events.key.keysym.sym == SDLK_a)
+            {
+                std::cout << "A" << std::endl;
+                // action 1
+                return true;
+            }
+            else if (events.key.keysym.sym == SDLK_s)
+            {
+                std::cout << "S" << std::endl;
+                // action 2
+                return true;
+            }
+            else if (events.key.keysym.sym == SDLK_d)
+            {
+                std::cout << "D" << std::endl;
+                // action 3
+                return true;
+            }
+            else if (events.key.keysym.sym == SDLK_f)
+            {
+                std::cout << "F" << std::endl;
+                // action 4
+                return true;
+            }
+            else if (events.key.keysym.sym == SDLK_g)
+            {
+                std::cout << "G" << std::endl;
+                // action 5
+                return true;
+            }
+            else if (events.key.keysym.sym == SDLK_h)
+            {
+                std::cout << "H" << std::endl;
+                // action 6
+                return true;
+            }
+
+            // add case for esc to trigger pause menu
+        }
+    } */
+    return false;
+}

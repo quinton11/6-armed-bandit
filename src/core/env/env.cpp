@@ -44,6 +44,8 @@ void Env::eventChecker()
 
                 // mc.inButton(true, mousex, mousey);
             }
+
+            // add case for esc to trigger pause menu
         }
     }
 }
@@ -52,12 +54,55 @@ void Env::run(SDL_Renderer *r)
 {
     float dt;
     std::cout << "In run" << std::endl;
+    // start initial countdown
+    unsigned int tm = SDL_GetTicks();
+    EnvState envState = EnvState::Stall;
+    int timerValue = 3;
+    const Uint8 *state = SDL_GetKeyboardState(NULL);
     while (!done)
     {
         dt = Time::getDeltaTime();
 
         eventChecker();
         // run agent env loop
+
+        // timer
+        if ((tm % 1000 == 0) && (timerValue > 0))
+        {
+            std::cout << "Countdown: " << timerValue << " Seconds" << std::endl;
+            timerValue -= 1;
+        }
+
+        // change env state to receive action
+        if ((timerValue == 0) && (envState == EnvState::Stall))
+        {
+            std::cout << "Moving to receive state" << std::endl;
+            envState = EnvState::Receive;
+        }
+
+        if (envState == EnvState::Receive)
+        {
+
+            // text overlay
+            //  run agent event checker
+            //  check if action has been taken
+            //  if so set envState to stall
+            //  agent update action value estimate with reward
+            // user perform action
+            // run agent eventChecker
+            bool act = agent->takeAction(state);
+            if (act)
+            {
+                // User took action
+                // set envstate to stall
+                // set timerValue to 3
+                envState = EnvState::Stall;
+                timerValue = 3;
+                // agent update weight using current selected action
+                // update env states, number of steps left, agent score
+                std::cout << "Entering Stall State" << std::endl;
+            }
+        }
 
         /* Steps:
             - Query user for action
@@ -68,6 +113,9 @@ void Env::run(SDL_Renderer *r)
             - update environment states
             -render values */
 
+        /* Environment, agent boundary? Where agent's arbitrary control basically ends.
+        What can the agent directly control? */
+
         /* Env states for now include time steps taken and time steps left
             Agent score
             Each action taken subtracts from time step
@@ -75,14 +123,6 @@ void Env::run(SDL_Renderer *r)
             If env action state is (stall) then agent cannot input any action
             Set env action state based on countdowns, after 2 seconds state changes from stall
             to receive. After action is pressed, action is taken and state changed from receive to stall */
-        if (envState == EnvState::Receive)
-        {
-            // text overlay
-            //  run agent event checker
-            //  check if action has been taken
-            //  if so set envState to stall
-            //  agent update action value estimate with reward
-        }
         // update env state values
         update();
         // render
@@ -93,5 +133,6 @@ void Env::run(SDL_Renderer *r)
             text to prompt agent for action
             If stall don't run agent event checker, run normal render update functions and await countdown
              */
+        tm = SDL_GetTicks();
     }
 }
