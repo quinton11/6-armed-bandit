@@ -10,6 +10,14 @@ Env::~Env() {}
 
 Env::Env(Agent *ag) : agent(ag)
 {
+    actionValues = {
+        {Action::One, 1},
+        {Action::Two, 5},
+        {Action::Three, -3},
+        {Action::Four, -5},
+        {Action::Five, 8},
+        {Action::Six, -6},
+    };
 }
 
 void Env::setConfig() {}
@@ -53,14 +61,26 @@ void Env::eventChecker()
 void Env::run(SDL_Renderer *r)
 {
     float dt;
-    std::cout << "In run" << std::endl;
+    done = false;
+
+    // agent refresh
+    agent->setActions();
+    agent->resetActionValues();
+
     // start initial countdown
     unsigned int tm = SDL_GetTicks();
     EnvState envState = EnvState::Stall;
     int timerValue = 3;
+    int steps = 5;
     const Uint8 *state = SDL_GetKeyboardState(NULL);
     while (!done)
     {
+        if (steps < 1)
+        {
+            done = true;
+            HomeScreen::ismounted = true;
+            // instead mount pause screen
+        }
         dt = Time::getDeltaTime();
 
         eventChecker();
@@ -93,13 +113,24 @@ void Env::run(SDL_Renderer *r)
             bool act = agent->takeAction(state);
             if (act)
             {
+                std::cout << "Agent taken action on step: " << steps << std::endl;
                 // User took action
                 // set envstate to stall
                 // set timerValue to 3
                 envState = EnvState::Stall;
                 timerValue = 3;
+
                 // agent update weight using current selected action
+                float reward = actionValues[agent->selectedAction];
+                std::cout << "Reward: " << reward << std::endl;
                 // update env states, number of steps left, agent score
+                agent->updateWeights(reward,maxSteps);
+
+                // agent weight map
+                agent->printWeight();
+
+                // update step count
+                steps -= 1;
                 std::cout << "Entering Stall State" << std::endl;
             }
         }

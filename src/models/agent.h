@@ -20,13 +20,15 @@ public:
     std::list<Action> actions;
     std::map<Action, float> actionValues;
     std::map<Action, int> actionSteps;
-    bool takeAction(const Uint8* state);
-
+    bool takeAction(const Uint8 *state);
+    Action selectedAction;
+    void resetActionValues();
+    void setActions();
+    void updateWeights(float reward,int steps);
+    void printWeight();
 
 private:
     SDL_Event events;
-    void resetActionValues();
-    void setActions();
-    void updateActionValue(Action a, float reward, int tstep);
-    float estimate(float r, float prevR, int ts);
+    void updateActionValue(float reward,int steps);
+    float estimate(float r, float prevR, float ts);
 };

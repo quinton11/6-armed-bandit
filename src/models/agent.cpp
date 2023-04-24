@@ -29,6 +29,7 @@ void Agent::resetActionValues()
 }
 void Agent::setActions()
 {
+    actions.clear();
     actions.insert(actions.end(), {
                                       Action::One,
                                       Action::Two,
@@ -39,25 +40,67 @@ void Agent::setActions()
                                   });
 }
 
-void Agent::updateActionValue(Action a, float reward, int tstep)
+void Agent::printWeight()
 {
-    // update action timestep
-    actionSteps[a] += tstep;
-
-    int ts = actionSteps[a];
-    float prevR = actionValues[a];
-
-    // calculate new estimate for action
-    float updated = estimate(reward, prevR, ts);
-
-    // update
-    actionValues[a] = updated;
+    for (std::map<Action, float>::iterator av = actionValues.begin(); av != actionValues.end(); av++)
+    {
+        if (av->first == Action::One)
+        {
+            std::cout << "Action one: " << av->second << std::endl;
+        }
+        else if (av->first == Action::Two)
+        {
+            std::cout << "Action two: " << av->second << std::endl;
+        }
+        else if (av->first == Action::Three)
+        {
+            std::cout << "Action three: " << av->second << std::endl;
+        }
+        else if (av->first == Action::Four)
+        {
+            std::cout << "Action four: " << av->second << std::endl;
+        }
+        else if (av->first == Action::Five)
+        {
+            std::cout << "Action five: " << av->second << std::endl;
+        }
+        else if (av->first == Action::Six)
+        {
+            std::cout << "Action six: " << av->second << std::endl;
+        }
+    }
 }
 
-float Agent::estimate(float r, float prevV, int ts)
+void Agent::updateWeights(float reward, int steps)
+{
+    updateActionValue(reward, steps);
+}
+
+void Agent::updateActionValue(float reward, int steps)
+{
+    // update action timestep
+    actionSteps[selectedAction] += 1;
+
+    int ts = actionSteps[selectedAction];
+    float prevR = actionValues[selectedAction];
+
+    std::cout << "Action has been selected x" << ts << std::endl;
+
+    // calculate new estimate for action
+    float updated = estimate(reward, prevR, steps);
+
+    // update
+    actionValues[selectedAction] = updated;
+}
+
+float Agent::estimate(float r, float prevV, float ts)
 {
     // action value estimate
-    float update = prevV + (1 / ts) * (r - prevV);
+    std::cout << "Calculating update..." << std::endl;
+    std::cout << "Prev value: " << prevV << std::endl;
+    std::cout << "Step fraction: " << 1 / ts << std::endl;
+    float update = prevV + (1.f / ts) * (r - prevV);
+    std::cout << "Updated value: " << update << std::endl;
 
     return update;
 }
@@ -70,6 +113,7 @@ bool Agent::takeAction(const Uint8 *state)
     if (state[SDL_SCANCODE_A])
     {
         std::cout << "A" << std::endl;
+        selectedAction = Action::One;
         // action 1
         return true;
     }
@@ -77,79 +121,36 @@ bool Agent::takeAction(const Uint8 *state)
     {
         std::cout << "S" << std::endl;
         // action 2
+        selectedAction = Action::Two;
         return true;
     }
     else if (state[SDL_SCANCODE_D])
     {
         std::cout << "D" << std::endl;
         // action 3
+        selectedAction = Action::Three;
         return true;
     }
     else if (state[SDL_SCANCODE_F])
     {
         std::cout << "F" << std::endl;
         // action 4
+        selectedAction = Action::Four;
         return true;
     }
     else if (state[SDL_SCANCODE_G])
     {
         std::cout << "G" << std::endl;
-        // action 4
+        // action 5
+        selectedAction = Action::Five;
         return true;
     }
     else if (state[SDL_SCANCODE_H])
     {
         std::cout << "H" << std::endl;
-        // action 4
+        // action 6
+        selectedAction = Action::Six;
         return true;
     }
-
-    /* while (SDL_PollEvent(&events))
-    {
-        switch (events.type)
-        {
-        case SDL_KEYDOWN:
-            std::cout << "Key down" << std::endl;
-
-            if (events.key.keysym.sym == SDLK_a)
-            {
-                std::cout << "A" << std::endl;
-                // action 1
-                return true;
-            }
-            else if (events.key.keysym.sym == SDLK_s)
-            {
-                std::cout << "S" << std::endl;
-                // action 2
-                return true;
-            }
-            else if (events.key.keysym.sym == SDLK_d)
-            {
-                std::cout << "D" << std::endl;
-                // action 3
-                return true;
-            }
-            else if (events.key.keysym.sym == SDLK_f)
-            {
-                std::cout << "F" << std::endl;
-                // action 4
-                return true;
-            }
-            else if (events.key.keysym.sym == SDLK_g)
-            {
-                std::cout << "G" << std::endl;
-                // action 5
-                return true;
-            }
-            else if (events.key.keysym.sym == SDLK_h)
-            {
-                std::cout << "H" << std::endl;
-                // action 6
-                return true;
-            }
-
-            // add case for esc to trigger pause menu
-        }
-    } */
     return false;
 }
