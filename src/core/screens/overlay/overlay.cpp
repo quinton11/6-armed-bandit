@@ -45,7 +45,7 @@ void Overlay::render(SDL_Renderer *r)
             SDL_RenderCopyF(r, skip.text, nullptr, &skip.rect);
         }
 
-        SDL_SetRenderDrawColor(r, 0, 0, 0, SDL_ALPHA_OPAQUE);
+        SDL_SetRenderDrawColor(r, 200, 200, 200, SDL_ALPHA_OPAQUE);
 
         SDL_RenderPresent(r);
     }

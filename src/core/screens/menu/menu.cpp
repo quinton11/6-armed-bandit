@@ -145,14 +145,11 @@ void MenuController::setCustom(SDL_FRect c, float bs, SDL_Renderer *r)
 
 void MenuController::renderMenu(SDL_Renderer *r)
 {
-    // std::cout << "In render menu" << std::endl;
-    SDL_SetRenderDrawColor(r, 255, 0, 0, SDL_ALPHA_OPAQUE);
     int s;
 
     for (std::list<Button *>::iterator b = activeMenu.buttons.begin(); b != activeMenu.buttons.end();)
     {
         SDL_SetRenderDrawColor(r, 255, 255, 0, SDL_ALPHA_OPAQUE);
-        // SDL_RenderFillRectF(r, &((*b)->rect));
         if ((*b)->isActive)
         {
             SDL_RenderCopyF(r, (*b)->hovertext, nullptr, &(*b)->rect);
@@ -168,10 +165,6 @@ void MenuController::renderMenu(SDL_Renderer *r)
 
     // render ol
     ol.render(r);
-    /* if (ol.ismounted)
-    {
-        std::cout << "Overlay is mounted" << std::endl;
-    } */
 }
 
 void MenuController::inButton(bool isClicked, int mx, int my)
