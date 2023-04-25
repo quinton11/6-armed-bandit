@@ -6,6 +6,7 @@
 #include "../../utils/enums.h"
 #include "../screens/overlay/overlay.h"
 #include "../screens/home/homescreen.h"
+#include "../screens/pause/pause.h"
 /* This simulates the actual game
 Here, the agent receives a "state" from
 the environment, produces an action which then gives

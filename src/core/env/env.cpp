@@ -24,6 +24,7 @@ void Env::setConfig() {}
 void Env::update() {}
 void Env::render(SDL_Renderer *r)
 {
+    SDL_SetRenderDrawColor(r, 0, 0, 0, SDL_ALPHA_OPAQUE);
     SDL_RenderClear(r);
     SDL_RenderPresent(r);
 }
@@ -54,6 +55,11 @@ void Env::eventChecker()
             }
 
             // add case for esc to trigger pause menu
+        case SDL_KEYDOWN:
+            if (events.key.keysym.sym == SDLK_ESCAPE)
+            {
+                PauseScreen::ismounted = true;
+            }
         }
     }
 }
@@ -67,6 +73,10 @@ void Env::run(SDL_Renderer *r)
     agent->setActions();
     agent->resetActionValues();
 
+    // pause screen
+    PauseScreen pScreen = PauseScreen();
+    pScreen.refresh();
+
     // start initial countdown
     unsigned int tm = SDL_GetTicks();
     EnvState envState = EnvState::Stall;
@@ -75,14 +85,23 @@ void Env::run(SDL_Renderer *r)
     const Uint8 *state = SDL_GetKeyboardState(NULL);
     while (!done)
     {
+        // New Game || quit check
+        if (HomeScreen::ismounted || HomeScreen::quit)
+        {
+            break;
+        }
+
+        // terminal step check
         if (steps < 1)
         {
             done = true;
-            HomeScreen::ismounted = true;
-            // instead mount pause screen
+            PauseScreen::terminalStep = true;
         }
-        dt = Time::getDeltaTime();
 
+        // pause screen
+        pScreen.render(r);
+
+        dt = Time::getDeltaTime();
         eventChecker();
         // run agent env loop
 
@@ -124,7 +143,7 @@ void Env::run(SDL_Renderer *r)
                 float reward = actionValues[agent->selectedAction];
                 std::cout << "Reward: " << reward << std::endl;
                 // update env states, number of steps left, agent score
-                agent->updateWeights(reward,maxSteps);
+                agent->updateWeights(reward, maxSteps);
 
                 // agent weight map
                 agent->printWeight();
