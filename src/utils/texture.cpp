@@ -3,6 +3,7 @@
 
 //
 TTF_Font *Texture::font = nullptr;
+TTF_Font *Texture::numfont = nullptr;
 
 Texture::Texture() {}
 Texture::Texture(std::string fname)
@@ -15,10 +16,16 @@ Texture::Texture(std::string fname)
     }
 
     std::cout << fname.c_str() << std::endl;
-    font = TTF_OpenFont(fname.c_str(), 25);
+    //AwmuDemo-YzPML.otf
+    font = TTF_OpenFont((fname + "AwmuDemo-YzPML.ttf").c_str(), 25);
+    numfont = TTF_OpenFont((fname + "Starjedi.ttf").c_str(), 25);
     if (font == NULL)
     {
         std::cout << "Error loading font" << TTF_GetError() << std::endl;
+    }
+    if (numfont == NULL)
+    {
+        std::cout << "Error loading num font" << TTF_GetError() << std::endl;
     }
 }
 

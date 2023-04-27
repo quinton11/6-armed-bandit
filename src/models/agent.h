@@ -26,6 +26,7 @@ public:
     void setActions();
     void updateWeights(float reward,int steps);
     void printWeight();
+    void setAgent(AgentMode am,GameMode gm);
 
 private:
     SDL_Event events;

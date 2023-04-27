@@ -59,13 +59,45 @@ Util::getTextPairR(SDL_Renderer *r, std::string nm, SDL_FRect &dest)
     // surf = TTF_RenderText_Blended(Te)
 }
 
+std::string Util::toString(int digit)
+{
+    std::ostringstream strm;
+    strm << digit;
+    std::string result(strm.str());
+
+    return result;
+}
+
+SDL_Texture *Util::getTexture(SDL_Renderer *r, std::string txt, SDL_Color col, SDL_FRect &dest, bool isnum)
+{
+    SDL_Surface *surf;
+    SDL_Texture *txture;
+
+    /* const char *txtc = txt.c_str();
+    std::stringstream strval(txtc);
+    uint16_t utxt;
+    strval >> utxt;
+    std::cout << utxt << std::endl; */
+    TTF_Font *f = Texture::font;
+    if (isnum)
+        f = Texture::numfont;
+
+    surf = TTF_RenderUTF8_Blended(f, txt.c_str(), col);
+    txture = SDL_CreateTextureFromSurface(r, surf);
+    dest.w = surf->w;
+    dest.h = surf->h;
+    SDL_FreeSurface(surf);
+
+    return txture;
+}
+
 SDL_Texture *Util::getBlockText(SDL_Renderer *r, std::string btxt, SDL_FRect &dest)
 {
     SDL_Surface *s;
     SDL_Texture *t;
 
     std::cout << "Before creating blended wrapped block" << std::endl;
-    s = TTF_RenderUTF8_Blended_Wrapped(Texture::font, btxt.c_str(), {255, 255, 255},0);
+    s = TTF_RenderUTF8_Blended_Wrapped(Texture::font, btxt.c_str(), {255, 255, 255}, 0);
     if (s == NULL)
     {
         std::cout << "Error in creating surface" << std::endl;

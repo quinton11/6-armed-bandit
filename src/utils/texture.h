@@ -14,8 +14,9 @@ public:
     ~Texture();
 
     static TTF_Font *font;
+    static TTF_Font *numfont;
 
     void initTexture(std::string fname);
-    SDL_Texture *loadTexture(std::string file, SDL_Renderer *r);
+    static SDL_Texture *loadTexture(std::string file, SDL_Renderer *r);
     TTF_Font *getFont();
 };

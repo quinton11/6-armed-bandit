@@ -21,7 +21,7 @@ void HomeScreen::render(SDL_Renderer *r)
     update renderer */
     while (ismounted)
     {
-        SDL_SetRenderDrawColor(r, 100, 100, 0, SDL_ALPHA_OPAQUE);
+        SDL_SetRenderDrawColor(r, 185, 164, 56, SDL_ALPHA_OPAQUE);
         eventChecker();
         SDL_RenderClear(r);
         // draw menu on screen

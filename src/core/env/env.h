@@ -4,6 +4,7 @@
 
 #include "../../models/agent.h"
 #include "../../utils/enums.h"
+#include "../../utils/texture.h"
 #include "../screens/overlay/overlay.h"
 #include "../screens/home/homescreen.h"
 #include "../screens/pause/pause.h"
@@ -22,6 +23,7 @@ public:
     void run(SDL_Renderer *r);
     void eventChecker();
     std::map<Action, float> actionValues;
+    SDL_Texture *statBarT;
 
 private:
     Agent *agent;
@@ -32,7 +34,10 @@ private:
     SDL_Event events;
     int mx, my = 0;
     int maxSteps = 5;
+    int steps = 0;
     void render(SDL_Renderer *r);
+    void renderScoreTab(SDL_Renderer *r);
+    void renderEnvState(SDL_Renderer *r);
     bool done = false;
     Overlay ol;
 };

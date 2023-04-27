@@ -45,7 +45,7 @@ void Game::Run()
 {
 
     // fonts and textures
-    std::string fontPath = "assets/fonts/AwmuDemo-YzPML.otf";
+    std::string fontPath = "assets/fonts/";
     Texture txtManager = Texture(fontPath);
     // txtManager.initTexture(fontPath);
 

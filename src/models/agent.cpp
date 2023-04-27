@@ -4,6 +4,12 @@ Agent::Agent() {}
 Agent::Agent(std::string mName, AgentMode aMode, GameMode gMode)
     : modelName(mName), agentMode(aMode), gameMode(gMode) {}
 
+void Agent::setAgent(AgentMode am, GameMode gm)
+{
+    agentMode = am;
+    gameMode = gm;
+}
+
 void Agent::resetActionValues()
 {
     actionValues.clear();

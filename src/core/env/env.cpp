@@ -18,6 +18,10 @@ Env::Env(Agent *ag) : agent(ag)
         {Action::Five, 8},
         {Action::Six, -6},
     };
+
+    // load relevant textures
+    std::string statBar = "assets/textures/statsbar.png";
+    statBarT = Texture::loadTexture(statBar, Graphics::getInstance()->getRenderer());
 }
 
 void Env::setConfig() {}
@@ -26,7 +30,117 @@ void Env::render(SDL_Renderer *r)
 {
     SDL_SetRenderDrawColor(r, 0, 0, 0, SDL_ALPHA_OPAQUE);
     SDL_RenderClear(r);
+
+    // render hit buttons
+    // render bandit rect
+
+    renderScoreTab(r);
+
     SDL_RenderPresent(r);
+}
+
+void Env::renderEnvState(SDL_Renderer *r)
+{
+    // create HIT! and Stall state texts
+    // render based on states
+    // if stall state, render countdown
+}
+
+void Env::renderScoreTab(SDL_Renderer *r)
+{
+    // render Tab container
+    SDL_FRect container;
+    container.x = 0;
+    container.y = 0;
+    container.h = 80;
+    container.w = Graphics::windowWidth;
+
+    SDL_RenderCopyF(r, statBarT, nullptr, &container);
+
+    // create rendertab textures and blit onto screen
+    // textures with their texts
+
+    float xdisplace = 20;
+    // steps
+    SDL_FRect stepRect;
+    stepRect.x = container.x + 30;
+    stepRect.y = container.y + 15;
+    std::string stepText = "Steps ";
+    SDL_Texture *stepTexture = Util::getTexture(r, stepText, {0, 0, 0}, stepRect, false);
+
+    SDL_FRect stepValRect;
+    stepValRect.x = container.x + xdisplace + stepRect.w;
+    stepValRect.y = container.y + 15;
+
+    std::string stepVal = ": " + Util::toString(steps) + "/" + Util::toString(maxSteps);
+    SDL_Texture *stepValTexture = Util::getTexture(r, stepVal, {0, 0, 0}, stepValRect, true);
+
+    SDL_RenderCopyF(r, stepTexture, nullptr, &stepRect);
+    SDL_RenderCopyF(r, stepValTexture, nullptr, &stepValRect);
+
+    // divider
+    SDL_FRect divider = {stepValRect.x + stepValRect.w + xdisplace, 5, 2, 70};
+    SDL_SetRenderDrawColor(r, 0, 0, 0, SDL_ALPHA_OPAQUE);
+    SDL_RenderFillRectF(r, &divider);
+
+    // agent mode
+    SDL_FRect agentModeRect;
+    agentModeRect.x = divider.x + divider.w + xdisplace;
+    agentModeRect.y = container.y + 15;
+    std::string agmode = "Auto";
+    if (agent->agentMode == AgentMode::Manual)
+        agmode = "Manual";
+    std::string agentModeTxt = "Agent: " + agmode;
+    SDL_Texture *agentModeTexture = Util::getTexture(r, agentModeTxt, {0, 0, 0}, agentModeRect, false);
+
+    SDL_RenderCopyF(r, agentModeTexture, nullptr, &agentModeRect);
+
+    // divider
+    SDL_FRect dividerAg = {agentModeRect.x + agentModeRect.w + xdisplace, 5, 2, 70};
+    SDL_SetRenderDrawColor(r, 0, 0, 0, SDL_ALPHA_OPAQUE);
+    SDL_RenderFillRectF(r, &dividerAg);
+
+    // env mode
+    SDL_FRect envModeRect;
+    envModeRect.x = dividerAg.x + dividerAg.w + xdisplace;
+    envModeRect.y = container.y + 15;
+    std::string egmode = "Demo";
+    if (gMode == GameMode::Best)
+    {
+        egmode = "Best";
+    }
+    else if (gMode == GameMode::Custom)
+    {
+        egmode = "Custom";
+    }
+    std::string gameModeTxt = "Game: " + egmode;
+    SDL_Texture *gameModeTexture = Util::getTexture(r, gameModeTxt, {0, 0, 0}, envModeRect, false);
+
+    SDL_RenderCopyF(r, gameModeTexture, nullptr, &envModeRect);
+
+    // score
+
+    // divider
+    SDL_FRect dividerSc = {envModeRect.x + envModeRect.w + xdisplace, 5, 2, 70};
+    SDL_SetRenderDrawColor(r, 0, 0, 0, SDL_ALPHA_OPAQUE);
+    SDL_RenderFillRectF(r, &dividerSc);
+
+    SDL_FRect scoreValRect;
+    scoreValRect.x = dividerSc.x + dividerSc.w + xdisplace;
+    scoreValRect.y = container.y + 15;
+
+    std::string scoreVal = "Score: " + Util::toString(0);
+    SDL_Texture *scoreValTexture = Util::getTexture(r, scoreVal, {0, 0, 0}, scoreValRect, false);
+    SDL_RenderCopyF(r, scoreValTexture, nullptr, &scoreValRect);
+
+    // write score text,steps text and agent mode on screen
+
+    // free textures when done
+    SDL_DestroyTexture(stepTexture);
+    SDL_DestroyTexture(stepValTexture);
+    SDL_DestroyTexture(agentModeTexture);
+    SDL_DestroyTexture(gameModeTexture);
+    SDL_DestroyTexture(scoreValTexture);
 }
 
 void Env::eventChecker()
@@ -81,7 +195,7 @@ void Env::run(SDL_Renderer *r)
     unsigned int tm = SDL_GetTicks();
     EnvState envState = EnvState::Stall;
     int timerValue = 3;
-    int steps = 5;
+    steps = 5;
     const Uint8 *state = SDL_GetKeyboardState(NULL);
     while (!done)
     {
@@ -96,6 +210,7 @@ void Env::run(SDL_Renderer *r)
         {
             done = true;
             PauseScreen::terminalStep = true;
+            PauseScreen::ismounted = true;
         }
 
         // pause screen
