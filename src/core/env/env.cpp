@@ -36,14 +36,88 @@ void Env::render(SDL_Renderer *r)
 
     renderScoreTab(r);
 
+    renderEnvState(r);
+
+    // render hit buttons and bandit
+    renderHitButtons(r);
+
     SDL_RenderPresent(r);
+}
+
+void Env::renderHitButtons(SDL_Renderer *r)
+{
+
+    // render all six buttons
+    float buttonW = 70;
+    float buttonH = 70;
+    float ydisplace = Graphics::windowHeight / 2 - 60;
+    float xdisplace = 30;
+
+    SDL_SetRenderDrawColor(r, mainTheme.r, mainTheme.g, mainTheme.b, mainTheme.a);
+
+    // button A
+    SDL_FRect buttonA = {100, ydisplace, buttonW, buttonH};
+
+    // A texture
+    SDL_RenderFillRectF(r, &buttonA);
+    // button B
+    SDL_FRect buttonB = {buttonA.x + buttonA.w + xdisplace, ydisplace, buttonW, buttonH};
+    // B texture
+
+    SDL_RenderFillRectF(r, &buttonB);
+    // button C
+    SDL_FRect buttonC = {buttonB.x + buttonB.w + xdisplace, ydisplace, buttonW, buttonH};
+    // C texture
+
+    SDL_RenderFillRectF(r, &buttonC);
+    // button D
+    SDL_FRect buttonD = {buttonC.x + buttonC.w + xdisplace, ydisplace, buttonW, buttonH};
+    // D texture
+
+    SDL_RenderFillRectF(r, &buttonD);
+    // button E
+    SDL_FRect buttonE = {buttonD.x + buttonD.w + xdisplace, ydisplace, buttonW, buttonH};
+    // E texture
+
+    SDL_RenderFillRectF(r, &buttonE);
+    // button F
+    SDL_FRect buttonF = {buttonE.x + buttonE.w + xdisplace, ydisplace, buttonW, buttonH};
+    // F texture
+
+    SDL_RenderFillRectF(r, &buttonF);
+
+    // Delete all textures
 }
 
 void Env::renderEnvState(SDL_Renderer *r)
 {
     // create HIT! and Stall state texts
-    // render based on states
-    // if stall state, render countdown
+    float ydisplace = 100;
+    if (envState == EnvState::Stall)
+    {
+        // render countdown
+        SDL_FRect countdownRect = {50, ydisplace, 0, 0};
+        // create countdown rect
+        std::string countdownTxt = Util::toString(timerValue);
+        // create countdown texture
+        SDL_Texture *countdownTexture = Util::getTexture(r, countdownTxt, mainTheme, countdownRect, true);
+        // render texture
+        SDL_RenderCopyF(r, countdownTexture, nullptr, &countdownRect);
+        SDL_DestroyTexture(countdownTexture);
+    }
+    else if (envState == EnvState::Receive)
+    {
+        // std::cout << "Hit" << std::endl;
+        //  render HIT!
+        SDL_FRect hitRect = {Graphics::windowWidth - 150, ydisplace, 0, 0};
+        // create HIT rect
+        std::string hitTxt = "HIT!";
+        // create HIT texture
+        SDL_Texture *hitTexture = Util::getTexture(r, hitTxt, mainTheme, hitRect, false);
+        // render texture
+        SDL_RenderCopyF(r, hitTexture, nullptr, &hitRect);
+        SDL_DestroyTexture(hitTexture);
+    }
 }
 
 void Env::renderScoreTab(SDL_Renderer *r)
@@ -69,7 +143,7 @@ void Env::renderScoreTab(SDL_Renderer *r)
     SDL_Texture *stepTexture = Util::getTexture(r, stepText, {0, 0, 0}, stepRect, false);
 
     SDL_FRect stepValRect;
-    stepValRect.x = container.x + xdisplace + stepRect.w;
+    stepValRect.x = stepRect.x + 10 + stepRect.w;
     stepValRect.y = container.y + 15;
 
     std::string stepVal = ": " + Util::toString(steps) + "/" + Util::toString(maxSteps);
@@ -193,8 +267,8 @@ void Env::run(SDL_Renderer *r)
 
     // start initial countdown
     unsigned int tm = SDL_GetTicks();
-    EnvState envState = EnvState::Stall;
-    int timerValue = 3;
+    envState = EnvState::Stall;
+    timerValue = 3;
     steps = 5;
     const Uint8 *state = SDL_GetKeyboardState(NULL);
     while (!done)

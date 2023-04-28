@@ -26,6 +26,7 @@ public:
     SDL_Texture *statBarT;
 
 private:
+    SDL_Color mainTheme = {185, 164, 56}; // color
     Agent *agent;
     EnvState envState = EnvState::Stall;
     void setConfig(); // takes in level descriptors and configures according to values
@@ -35,9 +36,11 @@ private:
     int mx, my = 0;
     int maxSteps = 5;
     int steps = 0;
+    int timerValue;
     void render(SDL_Renderer *r);
     void renderScoreTab(SDL_Renderer *r);
     void renderEnvState(SDL_Renderer *r);
+    void renderHitButtons(SDL_Renderer *r);
     bool done = false;
     Overlay ol;
 };
