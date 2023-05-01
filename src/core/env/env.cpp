@@ -19,9 +19,42 @@ Env::Env(Agent *ag) : agent(ag)
         {Action::Six, -6},
     };
 
+    std::string assetsPath = "assets/textures/";
+
     // load relevant textures
-    std::string statBar = "assets/textures/statsbar.png";
-    statBarT = Texture::loadTexture(statBar, Graphics::getInstance()->getRenderer());
+    addTexture(assetsPath + "statsbar.png", "statsbar");
+
+    // armed Bandit text
+    addTexture(assetsPath + "armedBandit.png", "armedBandit");
+
+    // A
+    addTexture(assetsPath + "hitA.png", "hitA");
+    addTexture(assetsPath + "unhitA.png", "unhitA");
+
+    // B
+    addTexture(assetsPath + "hitB.png", "hitB");
+    addTexture(assetsPath + "unhitB.png", "unhitB");
+
+    // C
+    addTexture(assetsPath + "hitC.png", "hitC");
+    addTexture(assetsPath + "unhitC.png", "unhitC");
+
+    // D
+    addTexture(assetsPath + "hitD.png", "hitD");
+    addTexture(assetsPath + "unhitD.png", "unhitD");
+
+    // E
+    addTexture(assetsPath + "hitE.png", "hitE");
+    addTexture(assetsPath + "unhitE.png", "unhitE");
+
+    // F
+    addTexture(assetsPath + "hitF.png", "hitF");
+    addTexture(assetsPath + "unhitF.png", "unhitF");
+}
+
+void Env::addTexture(std::string path, std::string nm)
+{
+    textures.insert(std::pair<std::string, SDL_Texture *>(nm, Texture::loadTexture(path, Graphics::getInstance()->getRenderer())));
 }
 
 void Env::setConfig() {}
@@ -59,34 +92,87 @@ void Env::renderHitButtons(SDL_Renderer *r)
     SDL_FRect buttonA = {100, ydisplace, buttonW, buttonH};
 
     // A texture
-    SDL_RenderFillRectF(r, &buttonA);
+    // if acted and action is A
+    if (agent->acted && agent->selectedAction == Action::One)
+    {
+        SDL_RenderCopyF(r, textures["hitA"], nullptr, &buttonA);
+    }
+    else
+    {
+        SDL_RenderCopyF(r, textures["unhitA"], nullptr, &buttonA);
+    }
     // button B
     SDL_FRect buttonB = {buttonA.x + buttonA.w + xdisplace, ydisplace, buttonW, buttonH};
     // B texture
 
-    SDL_RenderFillRectF(r, &buttonB);
+    if (agent->acted && agent->selectedAction == Action::Two)
+    {
+        SDL_RenderCopyF(r, textures["hitB"], nullptr, &buttonB);
+    }
+    else
+    {
+        SDL_RenderCopyF(r, textures["unhitB"], nullptr, &buttonB);
+    }
     // button C
     SDL_FRect buttonC = {buttonB.x + buttonB.w + xdisplace, ydisplace, buttonW, buttonH};
     // C texture
 
-    SDL_RenderFillRectF(r, &buttonC);
+    if (agent->acted && agent->selectedAction == Action::Three)
+    {
+        SDL_RenderCopyF(r, textures["hitC"], nullptr, &buttonC);
+    }
+    else
+    {
+        SDL_RenderCopyF(r, textures["unhitC"], nullptr, &buttonC);
+    }
+
     // button D
     SDL_FRect buttonD = {buttonC.x + buttonC.w + xdisplace, ydisplace, buttonW, buttonH};
     // D texture
 
-    SDL_RenderFillRectF(r, &buttonD);
+    if (agent->acted && agent->selectedAction == Action::Four)
+    {
+        SDL_RenderCopyF(r, textures["hitD"], nullptr, &buttonD);
+    }
+    else
+    {
+        SDL_RenderCopyF(r, textures["unhitD"], nullptr, &buttonD);
+    }
+
     // button E
     SDL_FRect buttonE = {buttonD.x + buttonD.w + xdisplace, ydisplace, buttonW, buttonH};
     // E texture
 
-    SDL_RenderFillRectF(r, &buttonE);
+    if (agent->acted && agent->selectedAction == Action::Five)
+    {
+        SDL_RenderCopyF(r, textures["hitE"], nullptr, &buttonE);
+    }
+    else
+    {
+        SDL_RenderCopyF(r, textures["unhitE"], nullptr, &buttonE);
+    }
+
     // button F
     SDL_FRect buttonF = {buttonE.x + buttonE.w + xdisplace, ydisplace, buttonW, buttonH};
     // F texture
 
-    SDL_RenderFillRectF(r, &buttonF);
+    if (agent->acted && agent->selectedAction == Action::Six)
+    {
+        SDL_RenderCopyF(r, textures["hitF"], nullptr, &buttonF);
+    }
+    else
+    {
+        SDL_RenderCopyF(r, textures["unhitF"], nullptr, &buttonF);
+    }
 
-    // Delete all textures
+    // armed bandit
+    SDL_FRect armedB;
+    armedB.x = 10;
+    armedB.y = Graphics::windowHeight - 30;
+    armedB.w = 100;
+    armedB.h = 20;
+
+    SDL_RenderCopyF(r, textures["armedBandit"], nullptr, &armedB);
 }
 
 void Env::renderEnvState(SDL_Renderer *r)
@@ -107,7 +193,6 @@ void Env::renderEnvState(SDL_Renderer *r)
     }
     else if (envState == EnvState::Receive)
     {
-        // std::cout << "Hit" << std::endl;
         //  render HIT!
         SDL_FRect hitRect = {Graphics::windowWidth - 150, ydisplace, 0, 0};
         // create HIT rect
@@ -129,7 +214,7 @@ void Env::renderScoreTab(SDL_Renderer *r)
     container.h = 80;
     container.w = Graphics::windowWidth;
 
-    SDL_RenderCopyF(r, statBarT, nullptr, &container);
+    SDL_RenderCopyF(r, textures["statsbar"], nullptr, &container);
 
     // create rendertab textures and blit onto screen
     // textures with their texts
@@ -139,7 +224,7 @@ void Env::renderScoreTab(SDL_Renderer *r)
     SDL_FRect stepRect;
     stepRect.x = container.x + 30;
     stepRect.y = container.y + 15;
-    std::string stepText = "Steps ";
+    std::string stepText = "Steps";
     SDL_Texture *stepTexture = Util::getTexture(r, stepText, {0, 0, 0}, stepRect, false);
 
     SDL_FRect stepValRect;
@@ -149,13 +234,8 @@ void Env::renderScoreTab(SDL_Renderer *r)
     std::string stepVal = ": " + Util::toString(steps) + "/" + Util::toString(maxSteps);
     SDL_Texture *stepValTexture = Util::getTexture(r, stepVal, {0, 0, 0}, stepValRect, true);
 
-    SDL_RenderCopyF(r, stepTexture, nullptr, &stepRect);
-    SDL_RenderCopyF(r, stepValTexture, nullptr, &stepValRect);
-
     // divider
     SDL_FRect divider = {stepValRect.x + stepValRect.w + xdisplace, 5, 2, 70};
-    SDL_SetRenderDrawColor(r, 0, 0, 0, SDL_ALPHA_OPAQUE);
-    SDL_RenderFillRectF(r, &divider);
 
     // agent mode
     SDL_FRect agentModeRect;
@@ -164,15 +244,12 @@ void Env::renderScoreTab(SDL_Renderer *r)
     std::string agmode = "Auto";
     if (agent->agentMode == AgentMode::Manual)
         agmode = "Manual";
+
     std::string agentModeTxt = "Agent: " + agmode;
     SDL_Texture *agentModeTexture = Util::getTexture(r, agentModeTxt, {0, 0, 0}, agentModeRect, false);
 
-    SDL_RenderCopyF(r, agentModeTexture, nullptr, &agentModeRect);
-
     // divider
     SDL_FRect dividerAg = {agentModeRect.x + agentModeRect.w + xdisplace, 5, 2, 70};
-    SDL_SetRenderDrawColor(r, 0, 0, 0, SDL_ALPHA_OPAQUE);
-    SDL_RenderFillRectF(r, &dividerAg);
 
     // env mode
     SDL_FRect envModeRect;
@@ -190,24 +267,48 @@ void Env::renderScoreTab(SDL_Renderer *r)
     std::string gameModeTxt = "Game: " + egmode;
     SDL_Texture *gameModeTexture = Util::getTexture(r, gameModeTxt, {0, 0, 0}, envModeRect, false);
 
-    SDL_RenderCopyF(r, gameModeTexture, nullptr, &envModeRect);
-
     // score
 
     // divider
     SDL_FRect dividerSc = {envModeRect.x + envModeRect.w + xdisplace, 5, 2, 70};
-    SDL_SetRenderDrawColor(r, 0, 0, 0, SDL_ALPHA_OPAQUE);
-    SDL_RenderFillRectF(r, &dividerSc);
 
     SDL_FRect scoreValRect;
     scoreValRect.x = dividerSc.x + dividerSc.w + xdisplace;
     scoreValRect.y = container.y + 15;
 
-    std::string scoreVal = "Score: " + Util::toString(0);
+    std::string scoreVal = "Score";
     SDL_Texture *scoreValTexture = Util::getTexture(r, scoreVal, {0, 0, 0}, scoreValRect, false);
-    SDL_RenderCopyF(r, scoreValTexture, nullptr, &scoreValRect);
 
-    // write score text,steps text and agent mode on screen
+    // load static textures once
+    if (!loaded)
+    {
+        std::string stepText = "Steps";
+        // SDL_Texture *stepTexture = Util::getTexture(r, stepText, {0, 0, 0}, stepRect, false);
+        textures.insert(std::pair<std::string, SDL_Texture *>(stepText, Util::getTexture(r, stepText, {0, 0, 0}, stepRect, false)));
+
+        std::string scoreVal = "Score";
+        // SDL_Texture *scoreValTexture = Util::getTexture(r, scoreVal, {0, 0, 0}, scoreValRect, false);
+        textures.insert(std::pair<std::string, SDL_Texture *>(scoreVal, Util::getTexture(r, scoreVal, {0, 0, 0}, scoreValRect, false)));
+
+        loaded = true;
+    }
+    SDL_RenderCopyF(r, stepTexture, nullptr, &stepRect);
+    SDL_RenderCopyF(r, stepValTexture, nullptr, &stepValRect);
+
+    SDL_SetRenderDrawColor(r, 0, 0, 0, SDL_ALPHA_OPAQUE);
+    SDL_RenderFillRectF(r, &divider);
+
+    SDL_RenderCopyF(r, agentModeTexture, nullptr, &agentModeRect);
+
+    SDL_SetRenderDrawColor(r, 0, 0, 0, SDL_ALPHA_OPAQUE);
+    SDL_RenderFillRectF(r, &dividerAg);
+
+    SDL_RenderCopyF(r, gameModeTexture, nullptr, &envModeRect);
+
+    SDL_SetRenderDrawColor(r, 0, 0, 0, SDL_ALPHA_OPAQUE);
+    SDL_RenderFillRectF(r, &dividerSc);
+
+    SDL_RenderCopyF(r, scoreValTexture, nullptr, &scoreValRect);
 
     // free textures when done
     SDL_DestroyTexture(stepTexture);
@@ -306,6 +407,7 @@ void Env::run(SDL_Renderer *r)
         {
             std::cout << "Moving to receive state" << std::endl;
             envState = EnvState::Receive;
+            agent->acted = false;
         }
 
         if (envState == EnvState::Receive)

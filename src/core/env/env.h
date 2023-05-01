@@ -1,6 +1,7 @@
 #pragma once
 #include "SDL.h"
 #include "map"
+#include "memory"
 
 #include "../../models/agent.h"
 #include "../../utils/enums.h"
@@ -24,13 +25,16 @@ public:
     void eventChecker();
     std::map<Action, float> actionValues;
     SDL_Texture *statBarT;
+    std::map<std::string, SDL_Texture *> textures;
 
 private:
+    bool loaded = false;
     SDL_Color mainTheme = {185, 164, 56}; // color
     Agent *agent;
     EnvState envState = EnvState::Stall;
     void setConfig(); // takes in level descriptors and configures according to values
                       // depending on demo or custom or best,configure accordingly
+    void addTexture(std::string path, std::string nm);
     void update();
     SDL_Event events;
     int mx, my = 0;

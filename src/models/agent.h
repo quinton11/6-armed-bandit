@@ -22,14 +22,15 @@ public:
     std::map<Action, int> actionSteps;
     bool takeAction(const Uint8 *state);
     Action selectedAction;
+    bool acted = false;
     void resetActionValues();
     void setActions();
-    void updateWeights(float reward,int steps);
+    void updateWeights(float reward, int steps);
     void printWeight();
-    void setAgent(AgentMode am,GameMode gm);
+    void setAgent(AgentMode am, GameMode gm);
 
 private:
     SDL_Event events;
-    void updateActionValue(float reward,int steps);
+    void updateActionValue(float reward, int steps);
     float estimate(float r, float prevR, float ts);
 };

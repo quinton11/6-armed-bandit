@@ -120,42 +120,53 @@ bool Agent::takeAction(const Uint8 *state)
     {
         std::cout << "A" << std::endl;
         selectedAction = Action::One;
+        acted=true;
         // action 1
         return true;
     }
-    else if (state[SDL_SCANCODE_S])
+    else if (state[SDL_SCANCODE_B])
     {
-        std::cout << "S" << std::endl;
+        std::cout << "B" << std::endl;
         // action 2
         selectedAction = Action::Two;
+        acted=true;
+
+        return true;
+    }
+    else if (state[SDL_SCANCODE_C])
+    {
+        std::cout << "C" << std::endl;
+        // action 3
+        selectedAction = Action::Three;
+        acted=true;
+
         return true;
     }
     else if (state[SDL_SCANCODE_D])
     {
         std::cout << "D" << std::endl;
-        // action 3
-        selectedAction = Action::Three;
+        // action 4
+        selectedAction = Action::Four;
+        acted=true;
+
+        return true;
+    }
+    else if (state[SDL_SCANCODE_E])
+    {
+        std::cout << "E" << std::endl;
+        // action 5
+        selectedAction = Action::Five;
+        acted=true;
+
         return true;
     }
     else if (state[SDL_SCANCODE_F])
     {
         std::cout << "F" << std::endl;
-        // action 4
-        selectedAction = Action::Four;
-        return true;
-    }
-    else if (state[SDL_SCANCODE_G])
-    {
-        std::cout << "G" << std::endl;
-        // action 5
-        selectedAction = Action::Five;
-        return true;
-    }
-    else if (state[SDL_SCANCODE_H])
-    {
-        std::cout << "H" << std::endl;
         // action 6
         selectedAction = Action::Six;
+        acted=true;
+        
         return true;
     }
     return false;
