@@ -16,6 +16,7 @@ public:
     Agent(std::string mName, AgentMode aMode, GameMode gMode);
     std::string modelName;
     AgentMode agentMode;
+    AutoAgentMode autoMode;
     GameMode gameMode;
     std::list<Action> actions;
     std::map<Action, float> actionValues;
@@ -27,10 +28,13 @@ public:
     void setActions();
     void updateWeights(float reward, int steps);
     void printWeight();
-    void setAgent(AgentMode am, GameMode gm);
+    void setAgent(AgentMode am, GameMode gm, AutoAgentMode agm);
+    void updateScore(float update);
+    float getScore();
 
 private:
     SDL_Event events;
+    float score;
     void updateActionValue(float reward, int steps);
     float estimate(float r, float prevR, float ts);
 };

@@ -4,7 +4,9 @@
 
 #include <iostream>
 
-GameMode Env::gMode = GameMode::Demo;
+GameMode Env::gMode;
+AutoAgentMode Env::autoMode;
+AgentMode Env::agentMode;
 Env::Env() {}
 Env::~Env() {}
 
@@ -251,7 +253,7 @@ void Env::renderScoreTab(SDL_Renderer *r)
     // divider
     SDL_FRect dividerAg = {agentModeRect.x + agentModeRect.w + xdisplace, 5, 2, 70};
 
-    // env mode
+    // Env mode
     SDL_FRect envModeRect;
     envModeRect.x = dividerAg.x + dividerAg.w + xdisplace;
     envModeRect.y = container.y + 15;
@@ -267,31 +269,26 @@ void Env::renderScoreTab(SDL_Renderer *r)
     std::string gameModeTxt = "Game: " + egmode;
     SDL_Texture *gameModeTexture = Util::getTexture(r, gameModeTxt, {0, 0, 0}, envModeRect, false);
 
-    // score
-
     // divider
     SDL_FRect dividerSc = {envModeRect.x + envModeRect.w + xdisplace, 5, 2, 70};
 
+    // score
+    SDL_FRect scoreTxtRect;
+    scoreTxtRect.x = dividerSc.x + dividerSc.w + xdisplace;
+    scoreTxtRect.y = container.y + 15;
+
+    std::string scoreTxt = "Score";
+    SDL_Texture *scoreTxtTexture = Util::getTexture(r, scoreTxt, {0, 0, 0}, scoreTxtRect, false);
+
     SDL_FRect scoreValRect;
-    scoreValRect.x = dividerSc.x + dividerSc.w + xdisplace;
+    scoreValRect.x = scoreTxtRect.x + scoreTxtRect.w + 10;
     scoreValRect.y = container.y + 15;
 
-    std::string scoreVal = "Score";
-    SDL_Texture *scoreValTexture = Util::getTexture(r, scoreVal, {0, 0, 0}, scoreValRect, false);
+    std::string scoreValTxt = " " + Util::toString(agent->getScore());
+    SDL_Texture *scoreValTexture = Util::getTexture(r, scoreValTxt, {0, 0, 0}, scoreValRect, true);
 
     // load static textures once
-    if (!loaded)
-    {
-        std::string stepText = "Steps";
-        // SDL_Texture *stepTexture = Util::getTexture(r, stepText, {0, 0, 0}, stepRect, false);
-        textures.insert(std::pair<std::string, SDL_Texture *>(stepText, Util::getTexture(r, stepText, {0, 0, 0}, stepRect, false)));
 
-        std::string scoreVal = "Score";
-        // SDL_Texture *scoreValTexture = Util::getTexture(r, scoreVal, {0, 0, 0}, scoreValRect, false);
-        textures.insert(std::pair<std::string, SDL_Texture *>(scoreVal, Util::getTexture(r, scoreVal, {0, 0, 0}, scoreValRect, false)));
-
-        loaded = true;
-    }
     SDL_RenderCopyF(r, stepTexture, nullptr, &stepRect);
     SDL_RenderCopyF(r, stepValTexture, nullptr, &stepValRect);
 
@@ -308,6 +305,7 @@ void Env::renderScoreTab(SDL_Renderer *r)
     SDL_SetRenderDrawColor(r, 0, 0, 0, SDL_ALPHA_OPAQUE);
     SDL_RenderFillRectF(r, &dividerSc);
 
+    SDL_RenderCopyF(r, scoreTxtTexture, nullptr, &scoreTxtRect);
     SDL_RenderCopyF(r, scoreValTexture, nullptr, &scoreValRect);
 
     // free textures when done
@@ -315,6 +313,7 @@ void Env::renderScoreTab(SDL_Renderer *r)
     SDL_DestroyTexture(stepValTexture);
     SDL_DestroyTexture(agentModeTexture);
     SDL_DestroyTexture(gameModeTexture);
+    SDL_DestroyTexture(scoreTxtTexture);
     SDL_DestroyTexture(scoreValTexture);
 }
 
@@ -359,6 +358,7 @@ void Env::run(SDL_Renderer *r)
     done = false;
 
     // agent refresh
+    agent->setAgent(agentMode, gMode, autoMode);
     agent->setActions();
     agent->resetActionValues();
 
@@ -398,14 +398,14 @@ void Env::run(SDL_Renderer *r)
         // timer
         if ((tm % 1000 == 0) && (timerValue > 0))
         {
-            std::cout << "Countdown: " << timerValue << " Seconds" << std::endl;
+            // std::cout << "Countdown: " << timerValue << " Seconds" << std::endl;
             timerValue -= 1;
         }
 
         // change env state to receive action
         if ((timerValue == 0) && (envState == EnvState::Stall))
         {
-            std::cout << "Moving to receive state" << std::endl;
+            // std::cout << "Moving to receive state" << std::endl;
             envState = EnvState::Receive;
             agent->acted = false;
         }
@@ -423,17 +423,17 @@ void Env::run(SDL_Renderer *r)
             bool act = agent->takeAction(state);
             if (act)
             {
-                std::cout << "Agent taken action on step: " << steps << std::endl;
-                // User took action
-                // set envstate to stall
-                // set timerValue to 3
+                // std::cout << "Agent taken action on step: " << steps << std::endl;
+                //  User took action
+                //  set envstate to stall
+                //  set timerValue to 3
                 envState = EnvState::Stall;
                 timerValue = 3;
 
                 // agent update weight using current selected action
                 float reward = actionValues[agent->selectedAction];
-                std::cout << "Reward: " << reward << std::endl;
-                // update env states, number of steps left, agent score
+                // std::cout << "Reward: " << reward << std::endl;
+                //  update env states, number of steps left, agent score
                 agent->updateWeights(reward, maxSteps);
 
                 // agent weight map
@@ -441,39 +441,14 @@ void Env::run(SDL_Renderer *r)
 
                 // update step count
                 steps -= 1;
-                std::cout << "Entering Stall State" << std::endl;
+                // std::cout << "Entering Stall State" << std::endl;
             }
         }
 
-        /* Steps:
-            - Query user for action
-            - User chooses action
-            - action is performed //animate bandit pressing button?
-            - agent receives reward from taking action
-            - agent updates its weights or action value estimates(it learns)
-            - update environment states
-            -render values */
-
-        /* Environment, agent boundary? Where agent's arbitrary control basically ends.
-        What can the agent directly control? */
-
-        /* Env states for now include time steps taken and time steps left
-            Agent score
-            Each action taken subtracts from time step
-            If env action state is (receive action) then actions from agent are read
-            If env action state is (stall) then agent cannot input any action
-            Set env action state based on countdowns, after 2 seconds state changes from stall
-            to receive. After action is pressed, action is taken and state changed from receive to stall */
-        // update env state values
         update();
         // render
         render(r);
 
-        /*
-            We can check for a particular state. if receive, then run agent event checker and overlay
-            text to prompt agent for action
-            If stall don't run agent event checker, run normal render update functions and await countdown
-             */
         tm = SDL_GetTicks();
     }
 }

@@ -4,10 +4,20 @@ Agent::Agent() {}
 Agent::Agent(std::string mName, AgentMode aMode, GameMode gMode)
     : modelName(mName), agentMode(aMode), gameMode(gMode) {}
 
-void Agent::setAgent(AgentMode am, GameMode gm)
+void Agent::setAgent(AgentMode am, GameMode gm, AutoAgentMode agm)
 {
     agentMode = am;
     gameMode = gm;
+    autoMode = agm;
+}
+
+void Agent::updateScore(float update)
+{
+    score += update;
+}
+float Agent::getScore()
+{
+    return score;
 }
 
 void Agent::resetActionValues()
@@ -79,6 +89,13 @@ void Agent::printWeight()
 
 void Agent::updateWeights(float reward, int steps)
 {
+    if (gameMode == GameMode::Custom && autoMode == AutoAgentMode::Testing)
+    {
+        std::cout << "Custom agent testing mode" << std::endl;
+        return;
+    }
+
+    // if manual mode or custom training mode, update weight
     updateActionValue(reward, steps);
 }
 
@@ -102,11 +119,11 @@ void Agent::updateActionValue(float reward, int steps)
 float Agent::estimate(float r, float prevV, float ts)
 {
     // action value estimate
-    std::cout << "Calculating update..." << std::endl;
-    std::cout << "Prev value: " << prevV << std::endl;
-    std::cout << "Step fraction: " << 1 / ts << std::endl;
+    // std::cout << "Calculating update..." << std::endl;
+    // std::cout << "Prev value: " << prevV << std::endl;
+    // std::cout << "Step fraction: " << 1 / ts << std::endl;
     float update = prevV + (1.f / ts) * (r - prevV);
-    std::cout << "Updated value: " << update << std::endl;
+    // std::cout << "Updated value: " << update << std::endl;
 
     return update;
 }
@@ -114,13 +131,23 @@ float Agent::estimate(float r, float prevV, float ts)
 bool Agent::takeAction(const Uint8 *state)
 {
 
+    // check agent mode
+    if (gameMode == GameMode::Custom)
+    {
+        // automatic agent
+
+        // randomly select action
+
+        // return true
+    }
+
     SDL_PumpEvents();
 
     if (state[SDL_SCANCODE_A])
     {
         std::cout << "A" << std::endl;
         selectedAction = Action::One;
-        acted=true;
+        acted = true;
         // action 1
         return true;
     }
@@ -129,7 +156,7 @@ bool Agent::takeAction(const Uint8 *state)
         std::cout << "B" << std::endl;
         // action 2
         selectedAction = Action::Two;
-        acted=true;
+        acted = true;
 
         return true;
     }
@@ -138,7 +165,7 @@ bool Agent::takeAction(const Uint8 *state)
         std::cout << "C" << std::endl;
         // action 3
         selectedAction = Action::Three;
-        acted=true;
+        acted = true;
 
         return true;
     }
@@ -147,7 +174,7 @@ bool Agent::takeAction(const Uint8 *state)
         std::cout << "D" << std::endl;
         // action 4
         selectedAction = Action::Four;
-        acted=true;
+        acted = true;
 
         return true;
     }
@@ -156,7 +183,7 @@ bool Agent::takeAction(const Uint8 *state)
         std::cout << "E" << std::endl;
         // action 5
         selectedAction = Action::Five;
-        acted=true;
+        acted = true;
 
         return true;
     }
@@ -165,8 +192,8 @@ bool Agent::takeAction(const Uint8 *state)
         std::cout << "F" << std::endl;
         // action 6
         selectedAction = Action::Six;
-        acted=true;
-        
+        acted = true;
+
         return true;
     }
     return false;

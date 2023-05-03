@@ -21,30 +21,34 @@ public:
 
     Env(Agent *ag);
     static GameMode gMode;
+    static AutoAgentMode autoMode;
+    static AgentMode agentMode;
+
+    std::map<Action, float> actionValues;
+    std::map<std::string, SDL_Texture *> textures;
+
     void run(SDL_Renderer *r);
     void eventChecker();
-    std::map<Action, float> actionValues;
-    SDL_Texture *statBarT;
-    std::map<std::string, SDL_Texture *> textures;
 
 private:
     bool loaded = false;
     SDL_Color mainTheme = {185, 164, 56}; // color
     Agent *agent;
     EnvState envState = EnvState::Stall;
-    void setConfig(); // takes in level descriptors and configures according to values
-                      // depending on demo or custom or best,configure accordingly
-    void addTexture(std::string path, std::string nm);
-    void update();
+
     SDL_Event events;
     int mx, my = 0;
     int maxSteps = 5;
     int steps = 0;
     int timerValue;
+    bool done = false;
+    Overlay ol;
+    void setConfig(); // takes in level descriptors and configures according to values
+                      // depending on demo or custom or best,configure accordingly
+    void addTexture(std::string path, std::string nm);
+    void update();
     void render(SDL_Renderer *r);
     void renderScoreTab(SDL_Renderer *r);
     void renderEnvState(SDL_Renderer *r);
     void renderHitButtons(SDL_Renderer *r);
-    bool done = false;
-    Overlay ol;
 };

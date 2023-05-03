@@ -19,6 +19,13 @@ MenuController::MenuController()
     Button *back = new Button{"back", false, false};
     custom = Menu{"custom-menu", {newAgent, selectAgent, back}, false, false};
 
+    // automodel
+    Button *train = new Button{"Train", false, false};
+    Button *test = new Button{"Test", false, false};
+    Button *aback = new Button{"back", false, false};
+
+    automodel = Menu{"auto-menu", {train, test, aback}, false, false};
+
     ol = Overlay();
 }
 MenuController::~MenuController() {}
@@ -54,6 +61,7 @@ void MenuController::setMenus(int sW, int sH, SDL_Renderer *r)
     // set each menu
     setMain(c, bstarty, r);
     setCustom(c, bstarty, r);
+    setAuto(c, bstarty, r);
 
     setActiveMenu("main-menu");
     ol.setStructure(sW, sH, r);
@@ -143,6 +151,48 @@ void MenuController::setCustom(SDL_FRect c, float bs, SDL_Renderer *r)
     }
 }
 
+void MenuController::setAuto(SDL_FRect c, float bs, SDL_Renderer *r)
+{
+    float cx = c.x + c.w / 2;
+    float bx = cx - bwidth;
+
+    // training button
+    SDL_FRect trainrect = {bx, bs, bwidth, bheight};
+
+    // testing button
+    SDL_FRect testrect = {bx, trainrect.y + bheight + yspacing, bwidth, bheight};
+
+    // back button
+    SDL_FRect brect = {bx, testrect.y + bheight + yspacing, bwidth, bheight};
+
+    std::pair<SDL_Texture *, SDL_Texture *> txtPair;
+
+    for (std::list<Button *>::iterator b = automodel.buttons.begin(); b != automodel.buttons.end();)
+    {
+        if ((*b)->name == "Train")
+        {
+            (*b)->rect = trainrect;
+        }
+        else if ((*b)->name == "Test")
+        {
+            (*b)->rect = testrect;
+        }
+        else if ((*b)->name == "back")
+        {
+            (*b)->rect = brect;
+        }
+
+        // textures
+        txtPair = Util::getTextPairR(r, (*b)->name, (*b)->rect);
+
+        (*b)->rect.x = cx - (*b)->rect.w / 2;
+        (*b)->text = txtPair.first;
+        (*b)->hovertext = txtPair.second;
+
+        b++;
+    }
+}
+
 void MenuController::renderMenu(SDL_Renderer *r)
 {
     int s;
@@ -198,6 +248,8 @@ void MenuController::inButton(bool isClicked, int mx, int my)
                     {
                         std::cout << "Best button" << std::endl;
                         Env::gMode = GameMode::Best;
+
+                        // set overlay to best
                     }
                 }
                 break;
@@ -222,15 +274,52 @@ void MenuController::inButton(bool isClicked, int mx, int my)
                     if ((*b)->name == "create")
                     {
                         std::cout << "New Agent button" << std::endl;
+                        activeMenu = automodel;
                     }
                     else if ((*b)->name == "select")
                     {
                         std::cout << "Select Agent button" << std::endl;
+                        activeMenu = automodel;
                     }
                     else if ((*b)->name == "back")
                     {
                         std::cout << "Back button" << std::endl;
                         activeMenu = mmain;
+                    }
+                }
+                break;
+            }
+            b++;
+        }
+    }
+    else if (activeMenu.name == automodel.name)
+    {
+        // custom menu
+        for (b = activeMenu.buttons.begin(); b != activeMenu.buttons.end();)
+        {
+            // b->isActive = false;
+            (*b)->isActive = false;
+
+            if (mouseinplay(mx, my, (*b)->rect))
+            {
+                (*b)->isActive = true;
+
+                if (isClicked)
+                {
+                    if ((*b)->name == "Train")
+                    {
+                        std::cout << "Train Agent button" << std::endl;
+                        // activeMenu = automodel;
+                    }
+                    else if ((*b)->name == "Test")
+                    {
+                        std::cout << "Test Agent button" << std::endl;
+                        activeMenu = automodel;
+                    }
+                    else if ((*b)->name == "back")
+                    {
+                        std::cout << "Back button" << std::endl;
+                        activeMenu = custom;
                     }
                 }
                 break;

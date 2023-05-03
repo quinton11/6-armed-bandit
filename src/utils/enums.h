@@ -6,6 +6,12 @@ enum AgentMode
     Autonomous
 };
 
+enum AutoAgentMode
+{
+    Training,
+    Testing
+};
+
 enum GameMode
 {
     Demo,
