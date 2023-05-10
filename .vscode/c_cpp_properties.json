@@ -4,6 +4,7 @@
             "name": "Win32",
             "includePath": [
                 "${workspaceFolder}/**",
+                "${workspaceFolder}/lib/SDL2/include",
                 "${workspaceFolder}/lib/SDL2/include"
             ],
             "defines": [

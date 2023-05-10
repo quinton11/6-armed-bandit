@@ -27,6 +27,7 @@ MenuController::MenuController()
     automodel = Menu{"auto-menu", {train, test, aback}, false, false};
 
     ol = Overlay();
+    subController = SubController();
 }
 MenuController::~MenuController() {}
 
@@ -213,6 +214,14 @@ void MenuController::renderMenu(SDL_Renderer *r)
         b++;
     }
 
+    // render subscreens
+    subController.render(r);
+    if (subController.revertScreen)
+    {
+        activeMenu = custom;
+        subController.revertScreen = false;
+    }
+
     // render ol
     ol.render(r);
 }
@@ -275,11 +284,13 @@ void MenuController::inButton(bool isClicked, int mx, int my)
                     {
                         std::cout << "New Agent button" << std::endl;
                         activeMenu = automodel;
+                        subController.setActiveScreen("create");
                     }
                     else if ((*b)->name == "select")
                     {
                         std::cout << "Select Agent button" << std::endl;
                         activeMenu = automodel;
+                        subController.setActiveScreen("select");
                     }
                     else if ((*b)->name == "back")
                     {

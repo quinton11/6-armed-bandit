@@ -381,7 +381,8 @@ void Env::run(SDL_Renderer *r)
         }
 
         // terminal step check
-        if (steps < 1)
+        // quit after recording last step's score
+        if (steps < 1 && envState == EnvState::Receive)
         {
             done = true;
             PauseScreen::terminalStep = true;
@@ -398,7 +399,6 @@ void Env::run(SDL_Renderer *r)
         // timer
         if ((tm % 1000 == 0) && (timerValue > 0))
         {
-            // std::cout << "Countdown: " << timerValue << " Seconds" << std::endl;
             timerValue -= 1;
         }
 
