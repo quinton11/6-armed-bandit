@@ -58,7 +58,6 @@ void Game::Run()
     std::cout << "After texture init" << std::endl;
 
     HomeScreen home = HomeScreen(graphics->windowWidth, graphics->windowHeight, graphics->getRenderer());
-    std::cout << "After home screen init" << std::endl;
 
     // deltatime
     float dt;

@@ -6,7 +6,7 @@ project(ARMED_BANDIT
         LANGUAGES CXX
         )
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 message(STATUS "Cmake Build Configuration for ${PROJECT_NAME} @v${PROJECT_VERSION}")

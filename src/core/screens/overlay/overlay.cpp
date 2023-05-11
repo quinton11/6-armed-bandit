@@ -9,7 +9,13 @@ Overlay::Overlay()
 
     demo.title = "Demo Mode";
     demo.content =
-        " In this mode the user controls the agent.\n Agent is allowed six buttons to press where\n each button carries a unique weight.\n The weight in question being hid.\n You're allowed a limited amount of button hits.\n Your weight hits at the end of the episode\n shouldn't be less than twenty ;).\n Good Luck!";
+        " In this mode the user controls the agent.\n Agent is allowed six buttons to press where\n each button carries a unique weight.\n The weight in question being hid.\n You're allowed five button hits.\n Your weight hits at the end of the episode\n shouldn't be less than twenty ;).\n Good Luck!";
+
+    custom.title = "Custom Mode";
+    custom.content = " In this mode the agent is automatic.\n Agent is allowed six buttons to press where\n each button carries a unique weight.\n The weight in question being hid.\n Agent is allowed five button hits.\n Total weight hits at the end of the episode\n shouldn't be less than twenty. \n Good Game!";
+
+    best.title = "Best Mode";
+    best.content = " In this mode the agent is automatic.\n Agent is allowed six buttons to press where\n each button carries a unique weight.\n The weight in question being hid.\n Agent is allowed five button hits.\n Total weight hits at the end of the episode\n shouldn't be less than twenty. \n Good Game!";
 }
 Overlay::~Overlay() {}
 
@@ -32,20 +38,19 @@ void Overlay::render(SDL_Renderer *r)
         SDL_RenderCopyF(r, current->titleT, nullptr, &titleCon);
 
         // render content
-        SDL_RenderCopyF(r, demo.contentT, nullptr, &contentCon);
+        SDL_RenderCopyF(r, current->contentT, nullptr, &contentCon);
 
         // render skipbutton
         if (skip.isActive)
         {
             SDL_RenderCopyF(r, skip.hovertext, nullptr, &skip.rect);
-            // std::cout << "Is Active" << std::endl;
         }
         else
         {
             SDL_RenderCopyF(r, skip.text, nullptr, &skip.rect);
         }
 
-        SDL_SetRenderDrawColor(r, 200, 200, 200, SDL_ALPHA_OPAQUE);
+        SDL_SetRenderDrawColor(r, 10, 10, 10, SDL_ALPHA_OPAQUE);
 
         SDL_RenderPresent(r);
     }
@@ -158,11 +163,21 @@ void Overlay::setStructure(int sW, int sH, SDL_Renderer *r)
     skip.hovertext = res.second;
 
     // produce texts for each overlay
+    // demo
     std::pair<SDL_Texture *, SDL_Texture *> resd = Util::getTextPairR(r, demo.title, titleCon);
     titleCon.x = cx - titleCon.w / 2;
     demo.titleT = resd.first;
     demo.contentT = Util::getBlockText(r, demo.content, contentCon);
-    // skip texts
+
+    // custom
+    resd = Util::getTextPairR(r, custom.title, titleCon);
+    custom.titleT = resd.first;
+    custom.contentT = Util::getBlockText(r, custom.content, contentCon);
+
+    // best
+    resd = Util::getTextPairR(r, best.title, titleCon);
+    best.titleT = resd.first;
+    best.contentT = Util::getBlockText(r, best.content, contentCon);
 
     // content text
 }

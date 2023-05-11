@@ -5,8 +5,6 @@
 
 int main()
 {
-    std::cout
-        << "K-armed Bandit" << std::endl;
     Game *g = Game::getInstance();
 
     g->Run();

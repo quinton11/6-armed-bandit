@@ -24,9 +24,12 @@ public:
     bool ismounted = false;
     bool revertScreen = false;
     bool setbuttons = false;
+    bool playerSelected = false;
+    std::list<Button> playerButtons;
     int mx, my;
     SDL_Event events;
     Button backButton;
+    Button selectedPlayer;
 
     void render(SDL_Renderer *r);
     bool mouseinplay(int mx, int my, SDL_FRect r);
@@ -36,6 +39,8 @@ public:
     void inButton(bool clicked);
     void setActiveScreen(std::string activescreen);
     void renderTitle(SDL_Renderer *r, std::string nm);
+    void matchPlayerToButtons(SDL_Renderer *r);
+    void renderPlayers(SDL_Renderer *r);
     void renderInputScreen(SDL_Renderer *r);
     void renderSubScreens(SDL_Renderer *r);
     void renderCreateModel(SDL_Renderer *r);

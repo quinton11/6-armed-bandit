@@ -100,7 +100,6 @@ void MenuController::setMain(SDL_FRect c, float bs, SDL_Renderer *r)
         }
 
         // textures
-        std::cout << "In get text pair" << std::endl;
         txtPair = Util::getTextPairR(r, (*b)->name, (*b)->rect);
 
         (*b)->rect.x = cx - (*b)->rect.w / 2;
@@ -257,6 +256,7 @@ void MenuController::inButton(bool isClicked, int mx, int my)
                     {
                         std::cout << "Best button" << std::endl;
                         Env::gMode = GameMode::Best;
+                        ol.setOverlay("Best Mode");
 
                         // set overlay to best
                     }
@@ -320,12 +320,18 @@ void MenuController::inButton(bool isClicked, int mx, int my)
                     if ((*b)->name == "Train")
                     {
                         std::cout << "Train Agent button" << std::endl;
-                        // activeMenu = automodel;
+                        // training mode
+                        Env::setModes(GameMode::Custom, AutoAgentMode::Training, AgentMode::Autonomous);
+                        // set overlay
+                        ol.setOverlay("Custom Mode");
                     }
                     else if ((*b)->name == "Test")
                     {
                         std::cout << "Test Agent button" << std::endl;
-                        activeMenu = automodel;
+                        // testing mode
+                        Env::setModes(GameMode::Custom, AutoAgentMode::Training, AgentMode::Autonomous);
+                        // set overlay
+                        ol.setOverlay("Custom Mode");
                     }
                     else if ((*b)->name == "back")
                     {

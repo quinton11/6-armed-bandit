@@ -169,9 +169,18 @@ void SubController::eventChecker()
                     std::cout << "Created player!" << std::endl;
 
                     ismounted = false;
-                    // textInput = "";
-                    //  create new player and move to play screen
+                    
                     break;
+                }
+            }
+            else if (activeScreen == "select")
+            {
+                switch (events.key.keysym.sym)
+                {
+                case SDLK_RETURN:
+                    std::cout << "[Enter] hit" << std::endl;
+                    std::cout << "Selected Player: " << selectedPlayer.name << std::endl;
+                    ismounted = false;
                 }
             }
             break;
@@ -204,6 +213,92 @@ void SubController::inButton(bool clicked)
             revertScreen = true;
         }
     }
+    if (activeScreen == "select")
+    {
+        std::list<Button>::iterator it;
+        for (it = playerButtons.begin(); it != playerButtons.end(); it++)
+        {
+            it->isActive = false;
+            if (mouseinplay(mx, my, it->dest))
+            {
+                it->isActive = true;
+                if (clicked)
+                {
+                    selectedPlayer = *it;
+                    playerSelected = true;
+                    filemanager::currentPlayer = it->name;
+                    filemanager::currentScore = filemanager::playerScores[it->name];
+                    break;
+                }
+            }
+        }
+    }
+}
+
+void SubController::matchPlayerToButtons(SDL_Renderer *r)
+{
+    // match player to buttons
+    // check if length of players list is equal to length of player buttons
+    // if not
+    if (playerButtons.size() == filemanager::playerScores.size())
+    {
+        return;
+    }
+
+    // sizes are different
+    // build buttons
+    Button temp;
+    std::map<std::string, float>::iterator it;
+    std::pair<SDL_Texture *, SDL_Texture *> temppair;
+    playerButtons.clear();
+    for (it = filemanager::playerScores.begin(); it != filemanager::playerScores.end(); it++)
+    {
+        temp = Button{it->first, false, false};
+        temppair = Util::getTextPairR(r, it->first, temp.dest);
+        temp.text = temppair.first;
+        temp.hovertext = temppair.second;
+        playerButtons.push_back(temp);
+    }
+}
+void SubController::renderPlayers(SDL_Renderer *r)
+{
+    // render players
+    SDL_FRect container = {0, 0, 300, 400};
+    container.x = (Graphics::windowWidth / 2) - container.w / 2;
+    container.y = 130;
+
+    SDL_SetRenderDrawColor(r, 185, 164, 56, SDL_ALPHA_OPAQUE);
+    SDL_RenderFillRectF(r, &container);
+
+    // loop through player buttons and render
+    if (playerSelected)
+    {
+        SDL_SetRenderDrawColor(r, 20, 255, 0, SDL_ALPHA_OPAQUE);
+        SDL_RenderFillRectF(r, &(selectedPlayer.dest));
+    }
+
+    float yoffset = container.y + 20;
+    for (std::list<Button>::iterator it = playerButtons.begin(); it != playerButtons.end(); it++)
+    {
+        it->rect.w = 180;
+        it->rect.h = 20;
+        it->rect.x = (container.x + container.w / 2) - (it->rect.w / 2);
+        it->rect.y = yoffset;
+
+        it->dest.x = it->rect.x;
+        it->dest.y = it->rect.y;
+
+        if (it->isActive)
+        {
+            SDL_RenderCopyF(r, it->hovertext, nullptr, &(it->dest));
+        }
+        if (!it->isActive)
+        {
+            SDL_RenderCopyF(r, it->text, nullptr, &(it->dest));
+        }
+
+        yoffset += it->rect.h + 5;
+    }
 }
 
 void SubController::setActiveScreen(std::string activescreen)
@@ -215,4 +310,8 @@ void SubController::renderCreateModel(SDL_Renderer *r)
 {
     renderInputScreen(r);
 }
-void SubController::renderSelectModel(SDL_Renderer *r) {}
+void SubController::renderSelectModel(SDL_Renderer *r)
+{
+    matchPlayerToButtons(r);
+    renderPlayers(r);
+}

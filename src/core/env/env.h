@@ -23,6 +23,7 @@ public:
     static GameMode gMode;
     static AutoAgentMode autoMode;
     static AgentMode agentMode;
+    static void setModes(GameMode gm,AutoAgentMode aam,AgentMode am);
 
     std::map<Action, float> actionValues;
     std::map<std::string, SDL_Texture *> textures;
@@ -31,12 +32,12 @@ public:
     void eventChecker();
 
 private:
-    bool loaded = false;
     SDL_Color mainTheme = {185, 164, 56}; // color
     Agent *agent;
     EnvState envState = EnvState::Stall;
-
     SDL_Event events;
+
+    bool loaded = false;
     int mx, my = 0;
     int maxSteps = 5;
     int steps = 0;

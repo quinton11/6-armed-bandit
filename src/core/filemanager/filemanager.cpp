@@ -151,6 +151,12 @@ bool filemanager::update(std::string name, float score, std::list<float> weights
 
 void filemanager::createPlayer(std::string name)
 {
-    playerScores[name] = 0.0;
-    playerWeights[name] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+    if (playerScores.find(name) == playerScores.end())
+    {
+        // player does not already exist
+        playerScores[name] = 0.0;
+        playerWeights[name] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+    }
+    currentPlayer = name;
+    playerScore = playerScores[name];
 }

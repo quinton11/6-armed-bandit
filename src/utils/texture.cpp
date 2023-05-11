@@ -15,8 +15,6 @@ Texture::Texture(std::string fname)
                   << IMG_GetError << std::endl;
     }
 
-    std::cout << fname.c_str() << std::endl;
-    //AwmuDemo-YzPML.otf
     font = TTF_OpenFont((fname + "AwmuDemo-YzPML.ttf").c_str(), 25);
     numfont = TTF_OpenFont((fname + "Starjedi.ttf").c_str(), 25);
     if (font == NULL)

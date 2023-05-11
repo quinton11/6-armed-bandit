@@ -12,6 +12,7 @@ Env::~Env() {}
 
 Env::Env(Agent *ag) : agent(ag)
 {
+    
     actionValues = {
         {Action::One, 1},
         {Action::Two, 5},
@@ -350,6 +351,13 @@ void Env::eventChecker()
             }
         }
     }
+}
+
+void Env::setModes(GameMode gm, AutoAgentMode aam, AgentMode am)
+{
+    gMode = gm;
+    autoMode = aam;
+    agentMode = am;
 }
 
 void Env::run(SDL_Renderer *r)
