@@ -6,6 +6,7 @@
 #include "../../../utils/utils.h"
 #include "../../../utils/components.h"
 #include "../../../utils/texture.h"
+#include "../../filemanager/filemanager.h"
 
 // controls create player and select player screens
 class SubController

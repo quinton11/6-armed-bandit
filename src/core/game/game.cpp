@@ -6,6 +6,7 @@
 #include "../../utils/time.h"
 #include "../../utils/texture.h"
 #include "iostream"
+#include "../filemanager/filemanager.h"
 
 Game *Game::instance = nullptr;
 Graphics *Game::graphics = nullptr;
@@ -19,6 +20,11 @@ Game::Game()
     {
         isDone = true;
     }
+
+    // init file
+    filemanager::init();
+    // read
+    filemanager::readFile();
 }
 Game::~Game()
 {
@@ -69,6 +75,8 @@ void Game::Run()
         else if (!HomeScreen::ismounted && HomeScreen::quit)
         {
             isDone = true;
+            // update file with scores
+            filemanager::writeToFile();
         }
         else
         {

@@ -12,6 +12,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 message(STATUS "Cmake Build Configuration for ${PROJECT_NAME} @v${PROJECT_VERSION}")
 
 add_executable(${PROJECT_NAME} src/main.cpp
+                src/core/filemanager/filemanager.cpp
                 src/core/game/game.cpp
                 src/core/graphics/graphics.cpp
                 src/models/agent.cpp

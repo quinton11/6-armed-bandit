@@ -106,13 +106,12 @@ void SubController::renderInputScreen(SDL_Renderer *r)
     temps = TTF_RenderText_Blended(Texture::font, txtInput.c_str(), {0, 0, 0});
     if (temps)
     {
-        //std::cout << "Created Successfully" << std::endl;
+        // std::cout << "Created Successfully" << std::endl;
         intexture = SDL_CreateTextureFromSurface(r, temps);
         inp.w = temps->w;
         inp.h = temps->h;
         SDL_FreeSurface(temps);
         temps = NULL;
-
 
         SDL_RenderCopyF(r, intexture, nullptr, &inp);
         SDL_DestroyTexture(intexture);
@@ -165,6 +164,9 @@ void SubController::eventChecker()
                 case SDLK_RETURN:
                     std::cout << "[Enter] hit" << std::endl;
                     std::cout << txtInput << std::endl;
+
+                    filemanager::createPlayer(txtInput);
+                    std::cout << "Created player!" << std::endl;
 
                     ismounted = false;
                     // textInput = "";
