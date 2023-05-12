@@ -8,6 +8,9 @@ HomeScreen::HomeScreen(int w, int h, SDL_Renderer *r) : width(w), height(h)
 {
     mc = MenuController();
     mc.setMenus(width, height, r);
+
+    // home texture
+    hometxt = Texture::loadTexture("assets/textures/homeup.png", r);
 }
 
 HomeScreen::~HomeScreen() {}
@@ -24,6 +27,8 @@ void HomeScreen::render(SDL_Renderer *r)
         SDL_SetRenderDrawColor(r, 185, 164, 56, SDL_ALPHA_OPAQUE);
         eventChecker();
         SDL_RenderClear(r);
+        // home texture
+        SDL_RenderCopyF(r, hometxt, nullptr, nullptr);
         // draw menu on screen
         mc.renderMenu(r);
 

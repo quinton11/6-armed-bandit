@@ -101,7 +101,6 @@ void Overlay::skipTrigger(bool isClicked)
         if (isClicked)
         {
             // unmount overlay
-            std::cout << "Overlay Unmounted" << std::endl;
             // unmount overlay and homescreen and move to actual game loop
             ismounted = false;
             HomeScreen::ismounted = false;

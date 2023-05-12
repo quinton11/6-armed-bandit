@@ -45,7 +45,7 @@ void MenuController::setActiveMenu(std::string n)
 void MenuController::setMenus(int sW, int sH, SDL_Renderer *r)
 {
     float cP = 0.7;
-    float bsy = 0.6;
+    float bsy = 0.7;
 
     // using screen width and height
     // draw and populate button rects
@@ -241,23 +241,28 @@ void MenuController::inButton(bool isClicked, int mx, int my)
                 {
                     if ((*b)->name == "demo")
                     {
-                        std::cout << "Demo button" << std::endl;
                         ol.setOverlay("Demo Mode");
                         // set game mode
                         Env::gMode = GameMode::Demo;
                     }
                     else if ((*b)->name == "custom")
                     {
-                        std::cout << "Custom button" << std::endl;
                         activeMenu = custom;
                         Env::gMode = GameMode::Custom;
                     }
                     else if ((*b)->name == "best")
                     {
-                        std::cout << "Best button" << std::endl;
                         Env::gMode = GameMode::Best;
-                        ol.setOverlay("Best Mode");
 
+                        // select best player
+                        if (filemanager::bestPlayer())
+                        {
+                            ol.setOverlay("Best Mode");
+                        }
+                        else
+                        {
+                            activeMenu = custom;
+                        }
                         // set overlay to best
                     }
                 }
@@ -282,19 +287,16 @@ void MenuController::inButton(bool isClicked, int mx, int my)
                 {
                     if ((*b)->name == "create")
                     {
-                        std::cout << "New Agent button" << std::endl;
                         activeMenu = automodel;
                         subController.setActiveScreen("create");
                     }
                     else if ((*b)->name == "select")
                     {
-                        std::cout << "Select Agent button" << std::endl;
                         activeMenu = automodel;
                         subController.setActiveScreen("select");
                     }
                     else if ((*b)->name == "back")
                     {
-                        std::cout << "Back button" << std::endl;
                         activeMenu = mmain;
                     }
                 }
@@ -319,7 +321,6 @@ void MenuController::inButton(bool isClicked, int mx, int my)
                 {
                     if ((*b)->name == "Train")
                     {
-                        std::cout << "Train Agent button" << std::endl;
                         // training mode
                         Env::setModes(GameMode::Custom, AutoAgentMode::Training, AgentMode::Autonomous);
                         // set overlay
@@ -327,15 +328,13 @@ void MenuController::inButton(bool isClicked, int mx, int my)
                     }
                     else if ((*b)->name == "Test")
                     {
-                        std::cout << "Test Agent button" << std::endl;
                         // testing mode
-                        Env::setModes(GameMode::Custom, AutoAgentMode::Training, AgentMode::Autonomous);
+                        Env::setModes(GameMode::Custom, AutoAgentMode::Testing, AgentMode::Autonomous);
                         // set overlay
                         ol.setOverlay("Custom Mode");
                     }
                     else if ((*b)->name == "back")
                     {
-                        std::cout << "Back button" << std::endl;
                         activeMenu = custom;
                     }
                 }

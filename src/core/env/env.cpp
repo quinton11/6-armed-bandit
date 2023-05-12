@@ -12,7 +12,7 @@ Env::~Env() {}
 
 Env::Env(Agent *ag) : agent(ag)
 {
-    
+
     actionValues = {
         {Action::One, 1},
         {Action::Two, 5},
@@ -176,6 +176,15 @@ void Env::renderHitButtons(SDL_Renderer *r)
     armedB.h = 20;
 
     SDL_RenderCopyF(r, textures["armedBandit"], nullptr, &armedB);
+
+    // current player
+    SDL_FRect banditModel;
+    SDL_Texture *banditTxt = Util::getTexture(r, filemanager::currentPlayer, mainTheme, banditModel, false);
+    banditModel.x = Graphics::windowWidth - banditModel.w - 30;
+    banditModel.y = Graphics::windowHeight - 60;
+
+    SDL_RenderCopyF(r, banditTxt, nullptr, &banditModel);
+    SDL_DestroyTexture(banditTxt);
 }
 
 void Env::renderEnvState(SDL_Renderer *r)
@@ -193,6 +202,17 @@ void Env::renderEnvState(SDL_Renderer *r)
         // render texture
         SDL_RenderCopyF(r, countdownTexture, nullptr, &countdownRect);
         SDL_DestroyTexture(countdownTexture);
+
+        if (agent->acted)
+        {
+            SDL_FRect scoreRect = {0, ydisplace, 0, 0};
+            std::string scoretxt = Util::toString(actionValues[agent->selectedAction]);
+
+            SDL_Texture *scoreTexture = Util::getTexture(r, scoretxt, mainTheme, scoreRect, true);
+            scoreRect.x = (Graphics::windowWidth / 2) - scoreRect.w / 2;
+
+            SDL_RenderCopyF(r, scoreTexture, nullptr, &scoreRect);
+        }
     }
     else if (envState == EnvState::Receive)
     {
@@ -366,9 +386,7 @@ void Env::run(SDL_Renderer *r)
     done = false;
 
     // agent refresh
-    agent->setAgent(agentMode, gMode, autoMode);
-    agent->setActions();
-    agent->resetActionValues();
+    agent->refresh(agentMode, gMode, autoMode);
 
     // pause screen
     PauseScreen pScreen = PauseScreen();
@@ -390,11 +408,17 @@ void Env::run(SDL_Renderer *r)
 
         // terminal step check
         // quit after recording last step's score
-        if (steps < 1 && envState == EnvState::Receive)
+        if (steps < 1)
         {
             done = true;
             PauseScreen::terminalStep = true;
             PauseScreen::ismounted = true;
+
+            // save score and weights
+            if (agentMode == AgentMode::Autonomous && autoMode == AutoAgentMode::Training)
+            {
+                filemanager::update(filemanager::currentPlayer, agent->getScore(), agent->getWeights());
+            }
         }
 
         // pause screen
@@ -403,6 +427,7 @@ void Env::run(SDL_Renderer *r)
         dt = Time::getDeltaTime();
         eventChecker();
         // run agent env loop
+        tm = SDL_GetTicks() * dt;
 
         // timer
         if ((tm % 1000 == 0) && (timerValue > 0))
@@ -428,7 +453,7 @@ void Env::run(SDL_Renderer *r)
             //  agent update action value estimate with reward
             // user perform action
             // run agent eventChecker
-            bool act = agent->takeAction(state);
+            bool act = agent->takeAction(state, steps);
             if (act)
             {
                 // std::cout << "Agent taken action on step: " << steps << std::endl;
@@ -443,9 +468,10 @@ void Env::run(SDL_Renderer *r)
                 // std::cout << "Reward: " << reward << std::endl;
                 //  update env states, number of steps left, agent score
                 agent->updateWeights(reward, maxSteps);
+                agent->updateScore(reward);
 
                 // agent weight map
-                agent->printWeight();
+                // agent->printWeight();
 
                 // update step count
                 steps -= 1;
@@ -456,7 +482,5 @@ void Env::run(SDL_Renderer *r)
         update();
         // render
         render(r);
-
-        tm = SDL_GetTicks();
     }
 }

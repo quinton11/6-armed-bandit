@@ -7,6 +7,7 @@
 #include "../../utils/texture.h"
 #include "iostream"
 #include "../filemanager/filemanager.h"
+#include "time.h"
 
 Game *Game::instance = nullptr;
 Graphics *Game::graphics = nullptr;
@@ -49,6 +50,9 @@ void Game::release()
 
 void Game::Run()
 {
+
+    // seed
+    srand(time(NULL));
 
     // fonts and textures
     std::string fontPath = "assets/fonts/";

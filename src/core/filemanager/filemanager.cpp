@@ -114,6 +114,15 @@ bool filemanager::readFile()
         // clear for next iteration
         tempWeight.clear();
     }
+
+    /* for (std::map<std::string, std::list<float>>::iterator weightsit = playerWeights.begin(); weightsit != playerWeights.end(); weightsit++)
+    {
+        std::cout << weightsit->first << std::endl;
+        for (std::list<float>::iterator it = (weightsit->second).begin(); it != (weightsit->second).end(); it++)
+        {
+            std::cout << *it << std::endl;
+        }
+    } */
 }
 
 void filemanager::addtoWeights(std::string name, std::list<float> tempWeight)
@@ -159,4 +168,17 @@ void filemanager::createPlayer(std::string name)
     }
     currentPlayer = name;
     playerScore = playerScores[name];
+}
+
+bool filemanager::bestPlayer()
+{
+    if (playerWeights.size() < 1)
+        return false;
+
+    // get player with max score
+    std::map<std::string, float>::iterator best = std::max_element(playerScores.begin(), playerScores.end(), [](const std::pair<std::string, float> &a, const std::pair<std::string, float> &b) -> bool
+                                                                   { return a.second < b.second; });
+    currentPlayer = best->first;
+    playerScore = playerScores[currentPlayer];
+    return true;
 }

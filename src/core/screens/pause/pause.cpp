@@ -16,7 +16,7 @@ void PauseScreen::render(SDL_Renderer *r)
     while (ismounted)
     {
         // background color
-        SDL_SetRenderDrawColor(r, 50, 50, 50, SDL_ALPHA_OPAQUE);
+        SDL_SetRenderDrawColor(r, 10, 10, 10, SDL_ALPHA_OPAQUE);
         SDL_RenderClear(r);
 
         eventChecker();
@@ -36,6 +36,7 @@ void PauseScreen::eventChecker()
         switch (events.type)
         {
         case SDL_QUIT:
+            ismounted = false;
             HomeScreen::quit = true;
             HomeScreen::ismounted = false;
             break;
@@ -113,7 +114,7 @@ void PauseScreen::drawButtons(SDL_Renderer *r)
         buttons.push_back(btempq);
     }
 
-    SDL_SetRenderDrawColor(r, 180, 0, 180, 255);
+    SDL_SetRenderDrawColor(r, 185, 164, 56, 255);
     SDL_RenderFillRectF(r, &midCon);
 
     for (std::list<Button>::iterator it = buttons.begin(); it != buttons.end();)

@@ -8,6 +8,7 @@
 #include "../utils/enums.h"
 #include "map"
 #include "list"
+#include "algorithm"
 
 class Agent
 {
@@ -21,15 +22,19 @@ public:
     std::list<Action> actions;
     std::map<Action, float> actionValues;
     std::map<Action, int> actionSteps;
-    bool takeAction(const Uint8 *state);
+    bool takeAction(const Uint8 *state, float steps);
     Action selectedAction;
     bool acted = false;
     void resetActionValues();
     void setActions();
     void updateWeights(float reward, int steps);
     void printWeight();
+    void trainAct(float steps);
+    void testAct();
     void setAgent(AgentMode am, GameMode gm, AutoAgentMode agm);
+    void refresh(AgentMode am, GameMode gm, AutoAgentMode agm);
     void updateScore(float update);
+    std::list<float> getWeights();
     float getScore();
 
 private:

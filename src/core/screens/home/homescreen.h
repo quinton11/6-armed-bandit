@@ -14,6 +14,7 @@ public:
     static bool ismounted; // set to static
     static bool quit;
     SDL_Event events;
+    SDL_Texture *hometxt;
     int mousex, mousey = 0;
 
 private:

@@ -9,7 +9,7 @@
 
 #include "iostream"
 #include "iomanip"
-
+#include "algorithm"
 
 namespace filemanager
 {
@@ -24,10 +24,11 @@ namespace filemanager
     //
     void init();
     bool fileExists();
+    bool bestPlayer();
     bool update(std::string name, float score, std::list<float> weight); // update player scores and weight
     void createPlayer(std::string name);
-    bool writeToFile();                                                  // write player details to file
-    bool readFile();                                                     // read player names along with score and weight
+    bool writeToFile(); // write player details to file
+    bool readFile();    // read player names along with score and weight
     void addtoWeights(std::string name, std::list<float> tempWeight);
     void addtoScores(std::string name, float score);
 
