@@ -3,12 +3,18 @@
 ## **Motive**
 Project is aimed at demonstrating the multi-armed bandit reinforcement learning problem. To briefly explain it, you(the agent) are to maximize your score by selecting the best action out of the available actions. However you have no prior knowledge of which action is the best (unless of course you peek through the code😼).
 
+**Preview**
+![Screenshot (218)](https://github.com/quinton11/armed-Bandit/assets/70300837/3b24d7c5-29d1-4de8-9718-a25f585c3442)
+
 *Rules*
 - There are 3 game modes.
 - Game is episodic, meaning your score is accumulated only in an episode.
 - An episode consists of 5 steps, or states.
 - The agent has 6 possible buttons to hit.
 - A button hit updates the score with the *weight* of the button and updates the *action-weights* of the agent
+
+*Preview-Episode*
+![Screenshot (219)](https://github.com/quinton11/armed-Bandit/assets/70300837/6d23c37d-4070-443c-b978-a07f763fd0c1)
 
 *Game Modes*
 - Demo: Manual mode, here user directly controls the button hits.
