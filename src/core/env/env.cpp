@@ -178,13 +178,16 @@ void Env::renderHitButtons(SDL_Renderer *r)
     SDL_RenderCopyF(r, textures["armedBandit"], nullptr, &armedB);
 
     // current player
-    SDL_FRect banditModel;
-    SDL_Texture *banditTxt = Util::getTexture(r, filemanager::currentPlayer, mainTheme, banditModel, false);
-    banditModel.x = Graphics::windowWidth - banditModel.w - 30;
-    banditModel.y = Graphics::windowHeight - 60;
+    if (gMode != GameMode::Demo)
+    {
+        SDL_FRect banditModel;
+        SDL_Texture *banditTxt = Util::getTexture(r, filemanager::currentPlayer, mainTheme, banditModel, false);
+        banditModel.x = Graphics::windowWidth - banditModel.w - 30;
+        banditModel.y = Graphics::windowHeight - 60;
 
-    SDL_RenderCopyF(r, banditTxt, nullptr, &banditModel);
-    SDL_DestroyTexture(banditTxt);
+        SDL_RenderCopyF(r, banditTxt, nullptr, &banditModel);
+        SDL_DestroyTexture(banditTxt);
+    }
 }
 
 void Env::renderEnvState(SDL_Renderer *r)
