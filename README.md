@@ -4,7 +4,7 @@
 Project is aimed at demonstrating the multi-armed bandit reinforcement learning problem. To briefly explain it, you(the agent) are to maximize your score by selecting the best action out of the available actions. However you have no prior knowledge of which action is the best (unless of course you peek through the code😼).
 
 **Preview**
-![Screenshot (218)](https://github.com/quinton11/armed-Bandit/assets/70300837/3b24d7c5-29d1-4de8-9718-a25f585c3442)
+![Screenshot (220)](https://github.com/quinton11/armed-Bandit/assets/70300837/05f8b224-db31-4288-adc7-c396680bec3a)
 
 *Rules*
 - There are 3 game modes.
@@ -13,7 +13,7 @@ Project is aimed at demonstrating the multi-armed bandit reinforcement learning 
 - The agent has 6 possible buttons to hit.
 - A button hit updates the score with the *weight* of the button and updates the *action-weights* of the agent
 
-*Preview-Episode*
+*Preview-Episode[Receive State]*
 ![Screenshot (219)](https://github.com/quinton11/armed-Bandit/assets/70300837/6d23c37d-4070-443c-b978-a07f763fd0c1)
 
 *Game Modes*
@@ -25,6 +25,7 @@ Project is aimed at demonstrating the multi-armed bandit reinforcement learning 
 - User created models consist of a map of actions to their respective weight values. The set of actions available are: `{A,B,C,D,E,F}`, each having individual weights.
 - The model, in training episodes, updates its weights by averaging the rewards it receives on every action. This is the *sample-average* action-value estimating method.
 - In testing runs, the model selects actions using a *greedy* policy. It checks its action value map and selects the action with the maximum return its *learnt* on previous episodes.
+- Model weights along with the score are stored in "playerweights.txt" in the executable directory. Format is `[model_name]  [score,...weights]`. Example: `Thors   23,0.2,0.4,3.9,1,0.5,2`
 
 **Building from source**
 - Clone repo and cd into it.
